@@ -12,6 +12,6 @@
   <context-param>
     <description>Location to store uploaded files.</description>
     <param-name>file-upload</param-name>
-    <param-value>C:\Gamego\WebContent\uploadFiles\</param-value>
+    <param-value>C:\Gamego\WebContent\uploadedFiles\</param-value>
   </context-param>
 </web-app>
