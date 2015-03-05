@@ -72,7 +72,7 @@ a:focus {
 .w-hidden {
   display: none;
 }
-html[w-dynpage] [w-cloak] {
+html[data-w-dynpage] [data-w-cloak] {
   color: transparent !important;
 }
 h1,
@@ -1643,10 +1643,6 @@ textarea.w-select {
     transform: rotate(360deg);
   }
 }
-.w-dyn-loading {
-  display: block;
-  padding: 10px;
-}
 .w-dyn-items {
   display: none;
 }
@@ -1654,6 +1650,7 @@ textarea.w-select {
   display: block;
 }
 .w-dyn-empty {
+  display: none;
   padding: 10px;
   background-color: #dddddd;
 }
