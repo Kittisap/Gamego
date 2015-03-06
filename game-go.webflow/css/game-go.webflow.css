@@ -1,15 +1,16 @@
 body {
-  background-image: -webkit-linear-gradient(white, #8ce86d 43%, #7bfa5f 84%, #3d7d28);
-  background-image: linear-gradient(white, #8ce86d 43%, #7bfa5f 84%, #3d7d28);
+  padding-bottom: 0px;
+  background-image: -webkit-linear-gradient(white, #94f274 62%, #88e673 90%, #3d7d28);
+  background-image: linear-gradient(white, #94f274 62%, #88e673 90%, #3d7d28);
   font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
   color: #333;
   font-size: 14px;
   line-height: 20px;
 }
 h1 {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-left: 23px;
+  margin-top: 19px;
+  margin-bottom: 1px;
+  margin-left: 0px;
   font-family: Exo, sans-serif;
   color: #2b2b2b;
   font-size: 26px;
@@ -19,6 +20,9 @@ h1 {
 h2 {
   margin-top: 20px;
   margin-bottom: 10px;
+  margin-left: 15px;
+  font-family: Exo, sans-serif;
+  color: #f26161;
   font-size: 32px;
   line-height: 36px;
   font-weight: 700;
@@ -56,7 +60,7 @@ p {
 }
 .button {
   display: inline-block;
-  padding: 4px 15px;
+  padding: 12px 15px;
   background-color: black;
   color: white;
   text-align: center;
@@ -94,6 +98,20 @@ p {
   font-weight: 700;
 }
 .nav-link-signup:hover {
+  -webkit-transform: translate(0px, -5px);
+  -ms-transform: translate(0px, -5px);
+  transform: translate(0px, -5px);
+  color: #ed5f5f;
+}
+.nav-link-cart {
+  -webkit-transition: all 500ms ease;
+  transition: all 500ms ease;
+  font-family: Exo, sans-serif;
+  color: #55c25d;
+  font-size: 17px;
+  font-weight: 700;
+}
+.nav-link-cart:hover {
   -webkit-transform: translate(0px, -5px);
   -ms-transform: translate(0px, -5px);
   transform: translate(0px, -5px);
@@ -195,13 +213,14 @@ p {
 }
 .bi-weekly-favorite-container {
   margin-top: 36px;
+  padding-top: 10px;
   border: 2px solid #756b6b;
   border-radius: 7px;
   background-color: rgba(255, 255, 255, 0.49);
 }
 .bi-weekly-favorites-text {
   margin-top: 12px;
-  margin-bottom: 7px;
+  margin-bottom: 14px;
   padding-left: 29px;
   font-family: Exo, sans-serif;
   font-size: 22px;
@@ -262,6 +281,7 @@ p {
   margin-top: 40px;
   padding-right: 25px;
   padding-bottom: 36px;
+  padding-left: 34px;
   border: 2px solid #403939;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.45);
@@ -273,6 +293,7 @@ p {
 }
 .search-page-container {
   margin-top: 60px;
+  padding: 10px 41px 19px 9px;
   border: 2px solid #5c5c5c;
   background-color: rgba(255, 255, 255, 0.63);
 }
@@ -292,14 +313,19 @@ p {
 }
 .genre-selector-box {
   margin-top: 33px;
+  border: 2px solid #5e5e5e;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.56);
 }
 .footer {
-  position: absolute;
+  position: fixed;
   left: 0px;
   right: 0px;
   bottom: 0px;
-  z-index: auto;
+  z-index: 0;
   margin-top: 30px;
+  padding-top: 0px;
+  padding-bottom: 0px;
   border-top: 2px solid #ab9b9b;
   background-color: white;
 }
@@ -376,4 +402,186 @@ p {
 }
 .link-block-to-categories {
   margin-top: 15px;
+}
+.stats-container {
+  margin-top: 50px;
+  padding-bottom: 23px;
+  padding-left: 18px;
+  border: 2px solid #b5a1a1;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.65);
+}
+.stat-category {
+  width: 448px;
+}
+.stat-month-year-selector {
+  margin-top: 39px;
+}
+.stat-month {
+  width: 250px;
+  margin-right: 15px;
+  float: left;
+}
+.select-month-text {
+  padding-bottom: 5px;
+  font-size: 17px;
+}
+.stat-year {
+  width: 250px;
+  margin-right: 15px;
+  float: left;
+}
+.cart-checkout-button {
+  margin-top: 15px;
+  margin-right: 83px;
+  float: right;
+  border: 2px solid #968d8d;
+  border-radius: 10px;
+  background-color: #ed4a4a;
+}
+.game-info-col-1 {
+  padding-left: 25px;
+}
+.game-container {
+  margin-top: 50px;
+  padding-bottom: 21px;
+  padding-left: 13px;
+  border: 2px solid #696565;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.72);
+}
+.game-image {
+  width: 500px;
+  height: 300px;
+  margin-left: 33px;
+}
+.game-description {
+  margin: 12px 16px 21px 44px;
+  padding-right: 34px;
+  padding-bottom: 1px;
+}
+.game-info {
+  margin-top: 47px;
+  margin-right: 0px;
+  margin-left: -140px;
+  padding-right: 0px;
+  float: none;
+}
+.game-info-col-2 {
+  margin-top: 46px;
+  padding-right: 29px;
+}
+.game-row-1 {
+  padding-bottom: 0px;
+}
+.add-to-cart {
+  width: 220px;
+  height: 68px;
+  margin-top: 39px;
+  margin-left: -142px;
+  float: none;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: rgba(255, 82, 82, 0.78);
+  font-family: Lato, sans-serif;
+  font-size: 25px;
+}
+.rating-text {
+  font-family: Exo, sans-serif;
+  font-size: 19px;
+  font-weight: 400;
+}
+.game-rating-text {
+  width: 200px;
+  float: left;
+}
+.text-rating {
+  width: 91px;
+  margin-left: 11px;
+  float: left;
+  color: #f03232;
+  font-size: 28px;
+  font-style: italic;
+}
+.genre-form-wrapper {
+  margin-top: 17px;
+  margin-right: 17px;
+  margin-left: 32px;
+}
+.game-search {
+  margin-top: 26px;
+  border-radius: 7px;
+}
+.game-search-image {
+  width: 125px;
+  height: 125px;
+  float: left;
+}
+.game-search-description {
+  width: 500px;
+  float: left;
+}
+.game-search-title {
+  width: 250px;
+  height: 41px;
+  float: none;
+}
+.checkout-container {
+  margin-top: 36px;
+  padding-bottom: 25px;
+  padding-left: 11px;
+  border: 2px solid #454545;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.70);
+  font-family: Exo, sans-serif;
+}
+.rating {
+  margin-top: 4px;
+  margin-left: -2px;
+}
+.history-container {
+  margin-top: 38px;
+  border: 2px solid #4f4f4f;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.68);
+}
+.history-image {
+  width: 150px;
+  height: 150px;
+  float: left;
+}
+.history-game-name {
+  width: 400px;
+  margin-top: 18px;
+  margin-left: 185px;
+}
+.rating-form {
+  margin-top: 16px;
+}
+.radio-star {
+  width: 50px;
+  height: 50px;
+  margin-left: 204px;
+  float: left;
+}
+.rating-form-wrapper {
+  margin-top: 41px;
+}
+.rating-field {
+  width: 250px;
+  margin-left: 35px;
+  float: left;
+}
+.order-info {
+  width: 800px;
+  margin-top: 36px;
+  margin-bottom: 33px;
+  margin-left: 18px;
+  padding-right: 77px;
+  font-family:'Droid Sans', sans-serif;
+  font-size: 17px;
+}
+.history-link-text {
+  margin-left: 19px;
+  font-size: 19px;
 }

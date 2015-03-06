@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <!-- This site was created in Webflow. http://www.webflow.com-->
 <!-- Last Published: Fri Mar 06 2015 04:31:06 GMT+0000 (UTC) -->
-<html data-wf-site="54eb722519500e4473ec8320" data-wf-page="54ecdee92657dee321afcecc">
+<html data-wf-site="54eb722519500e4473ec8320" data-wf-page="54f927810548cb0805862464">
 <head>
   <meta charset="utf-8">
-  <title>Signup - Game Go!</title>
+  <title>Customer History - Game Go!</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Webflow">
   <link rel="stylesheet" type="text/css" href="css/normalize.css">
@@ -34,26 +34,34 @@
       </div>
     </div>
   </div>
-  <div class="w-container signup-form login-form">
-    <div class="w-form signup-form-wrapper">
-      <form class="signup-container" id="email-form" name="email-form" data-name="Email Form">
-        <label class="username-field" for="Username-3">Username</label>
-        <input class="w-input username-text-field" id="Username-3" type="text" placeholder="Please enter your username" name="Username" data-name="Username" required="required" autofocus="autofocus">
-        <label class="email-field email-field" for="Email">Email</label>
-        <input class="w-input email-text-field" id="Email" type="email" placeholder="Please enter your email" name="Email" data-name="Email" required="required">
-        <label class="password-field" for="Password">Password</label>
-        <input class="w-input password-text-field" id="Password" type="password" placeholder="Please enter your password" name="Password" data-name="Password" required="required">
-        <label class="password-field" for="Password-2">Password Confirmation</label>
-        <input class="w-input password-text-field" id="Password-2" type="password" placeholder="Please enter your password again" name="Password-2" data-name="Password 2" required="required">
-        <input class="w-button login-button" type="submit" value="Submit" data-wait="Please wait...">
-      </form>
-      <div class="w-form-done">
-        <p>Thank you! Your submission has been received!</p>
-      </div>
-      <div class="w-form-fail">
-        <p>Oops! Something went wrong while submitting the form :(</p>
-      </div>
-    </div>
+  <div class="w-container history-container">
+    <h2>Your History</h2>
+    <ul>
+      <li class="w-clearfix"><img class="history-image" src="https://d3e54v103j8qbb.cloudfront.net/img/image-placeholder.svg" alt="image-placeholder.svg">
+        <div class="history-game-name"><strong>This is the name of the game</strong>
+        </div>
+        <div class="w-form rating-form-wrapper">
+          <form class="w-clearfix" id="email-form" name="email-form" data-name="Email Form">
+            <select class="w-select rating-field" id="Rating" name="Rating" data-name="Rating">
+              <option value="">Rate this Game!</option>
+              <option value="1">1 Star - Hate it</option>
+              <option value="2">2 Stars - Meh</option>
+              <option value="3">3 Stars - Good</option>
+              <option value="4">4 Stars - Great!</option>
+              <option value="5">5 Stars - WoW Killer</option>
+            </select>
+          </form>
+          <div class="w-form-done">
+            <p>Thank you! Your submission has been received!</p>
+          </div>
+          <div class="w-form-fail">
+            <p>Oops! Something went wrong while submitting the form :(</p>
+          </div>
+        </div>
+      </li>
+      <li></li>
+      <li></li>
+    </ul>
   </div>
   <div class="w-section w-clearfix footer"><img class="footer-logo" src="images/game go logo.png" width="169" alt="54eb77b357cf2eaa083890a1_game%20go%20logo.png">
     <div class="footer-text">Copyright 2015. All rights reserved.&nbsp;All trademarks&nbsp;are property of their respective owners in the US and other countries</div>

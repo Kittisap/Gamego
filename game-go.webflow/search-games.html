@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- This site was created in Webflow. http://www.webflow.com-->
-<!-- Last Published: Thu Mar 05 2015 23:36:54 GMT+0000 (UTC) -->
+<!-- Last Published: Fri Mar 06 2015 04:31:06 GMT+0000 (UTC) -->
 <html data-wf-site="54eb722519500e4473ec8320" data-wf-page="54ece1e6fccfc9e421e2cc3b">
 <head>
   <meta charset="utf-8">
@@ -14,7 +14,7 @@
   <script>
     WebFont.load({
       google: {
-        families: ["Exo:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic","Bitter:400,700,400italic","Ubuntu:300,300italic,400,400italic,500,500italic,700,700italic"]
+        families: ["Exo:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic","Bitter:400,700,400italic","Ubuntu:300,300italic,400,400italic,500,500italic,700,700italic","Lato:100,100italic,300,300italic,400,400italic,700,700italic,900,900italic","Droid Sans:400,700"]
       }
     });
   </script>
@@ -25,9 +25,9 @@
 <body>
   <div class="w-nav navbar main-navbar" data-collapse="medium" data-animation="default" data-duration="400" data-contain="1">
     <div class="w-container">
-      <a class="w-nav-brand brand-block" href="#"><img class="gamego-image" src="images/game go logo.png" width="214" height="62" alt="54eb77b357cf2eaa083890a1_game%20go%20logo.png">
+      <a class="w-nav-brand brand-block" href="index.html"><img class="gamego-image" src="images/game go logo.png" width="214" height="62" alt="54eb77b357cf2eaa083890a1_game%20go%20logo.png">
       </a>
-      <nav class="w-nav-menu" role="navigation"><a class="w-nav-link nav-link-login" href="login.html"><strong>Login</strong></a><a class="w-nav-link nav-link-signup" href="signup.html">Signup</a><a class="w-nav-link nav-link-cart" href="#">Cart</a>
+      <nav class="w-nav-menu" role="navigation"><a class="w-nav-link nav-link-login" href="login.html"><strong>Login</strong></a><a class="w-nav-link nav-link-signup" href="signup.html">Signup</a><a class="w-nav-link nav-link-cart" href="cart.html">Cart</a>
       </nav>
       <div class="w-nav-button">
         <div class="w-icon-nav-menu"></div>
@@ -35,19 +35,51 @@
     </div>
   </div>
   <div class="w-container genre-selector-box">
-    <div class="w-form">
-      <form id="email-form-3" name="email-form-3" data-name="Email Form 3">
-        <select class="w-select genre-selector" id="Genre" name="Genre" data-name="Genre" multiple="multiple">
-          <option value="">Please select a genre. Hold CTRL for multiple genres</option>
-          <option value="First">Action</option>
-          <option value="Second">Adventure</option>
-          <option value="Third">Shooter</option>
-          <option value="Fourth">Role-Playing</option>
-          <option value="Fifth">Simulator</option>
-          <option value="Sixth">Strategy</option>
-          <option value="Seventh">Sports</option>
-          <option value="eighth">Other</option>
-        </select>
+    <div class="w-form genre-form-wrapper">
+      <form id="email-form" name="email-form" data-name="Email Form">
+        <div class="w-row">
+          <div class="w-col w-col-3">
+            <div class="w-checkbox w-clearfix">
+              <input class="w-checkbox-input action-checkbox" id="checkbox" type="checkbox" name="checkbox" data-name="Checkbox">
+              <label class="w-form-label" for="checkbox">Action</label>
+            </div>
+            <div class="w-checkbox w-clearfix">
+              <input class="w-checkbox-input simulation-checkbox" id="checkbox-2" type="checkbox" name="checkbox-2" data-name="Checkbox 2">
+              <label class="w-form-label" for="checkbox-2">Simulation</label>
+            </div>
+          </div>
+          <div class="w-col w-col-3">
+            <div class="w-checkbox w-clearfix">
+              <input class="w-checkbox-input adventure-checkbox" id="checkbox-3" type="checkbox" name="checkbox-3" data-name="Checkbox 3">
+              <label class="w-form-label" for="checkbox-3">Adventure</label>
+            </div>
+            <div class="w-checkbox w-clearfix">
+              <input class="w-checkbox-input strategy-checkbox" id="checkbox-4" type="checkbox" name="checkbox-4" data-name="Checkbox 4">
+              <label class="w-form-label" for="checkbox-4">Strategy</label>
+            </div>
+          </div>
+          <div class="w-col w-col-3">
+            <div class="w-checkbox w-clearfix">
+              <input class="w-checkbox-input shooter-checkbox" id="checkbox-5" type="checkbox" name="checkbox-5" data-name="Checkbox 5">
+              <label class="w-form-label" for="checkbox-5">Shooter</label>
+            </div>
+            <div class="w-checkbox w-clearfix">
+              <input class="w-checkbox-input sports-checkbox" id="checkbox-6" type="checkbox" name="checkbox-6" data-name="Checkbox 6">
+              <label class="w-form-label" for="checkbox-6">Sports</label>
+            </div>
+          </div>
+          <div class="w-col w-col-3">
+            <div class="w-checkbox w-clearfix">
+              <input class="w-checkbox-input rp-checkbox" id="checkbox-7" type="checkbox" name="checkbox-7" data-name="Checkbox 7">
+              <label class="w-form-label" for="checkbox-7">Role Playing</label>
+            </div>
+            <div class="w-checkbox w-clearfix">
+              <input class="w-checkbox-input other-checkbox" id="checkbox-8" type="checkbox" name="checkbox-8" data-name="Checkbox 8">
+              <label class="w-form-label" for="checkbox-8">Other</label>
+            </div>
+          </div>
+        </div>
+        <input class="w-input game-search" id="search-Game" type="text" placeholder="Search for a Title, Developer, Publisher, etc.." name="search-Game" required="required" data-name="search Game">
       </form>
       <div class="w-form-done">
         <p>Thank you! Your submission has been received!</p>
@@ -57,7 +89,19 @@
       </div>
     </div>
   </div>
-  <div class="w-container search-page-container"></div>
+  <div class="w-container search-page-container">
+    <h2>Results</h2>
+    <ul>
+      <li class="w-clearfix">
+        <a class="w-clearfix w-inline-block" href="#"><img class="game-search-image" src="https://d3e54v103j8qbb.cloudfront.net/img/image-placeholder.svg" alt="image-placeholder.svg">
+        </a>
+        <div class="game-search-title">This is the name of the game</div>
+        <div class="game-search-description">This is the description</div>
+      </li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
   <div class="w-section w-clearfix footer"><img class="footer-logo" src="images/game go logo.png" width="169" alt="54eb77b357cf2eaa083890a1_game%20go%20logo.png">
     <div class="footer-text">Copyright 2015. All rights reserved.&nbsp;All trademarks&nbsp;are property of their respective owners in the US and other countries</div>
   </div>
