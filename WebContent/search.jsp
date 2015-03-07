@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@ page import="com.gamego.search.*" %>
 <!DOCTYPE html>
 <!-- This site was created in Webflow. http://www.webflow.com-->
 <!-- Last Published: Fri Mar 06 2015 04:31:06 GMT+0000 (UTC) -->
@@ -91,6 +94,7 @@
   </div>
   <div class="w-container search-page-container">
     <h2>Results</h2>
+    <!--
     <ul>
       <li class="w-clearfix">
         <a class="w-clearfix w-inline-block" href="#"><img class="game-search-image" src="https://d3e54v103j8qbb.cloudfront.net/img/image-placeholder.svg" alt="image-placeholder.svg">
@@ -100,7 +104,8 @@
       </li>
       <li></li>
       <li></li>
-    </ul>
+	</ul>
+	-->
   </div>
   <div class="w-section w-clearfix footer"><img class="footer-logo" src="images/game go logo.png" width="169" alt="54eb77b357cf2eaa083890a1_game%20go%20logo.png">
     <div class="footer-text">Copyright 2015. All rights reserved.&nbsp;All trademarks&nbsp;are property of their respective owners in the US and other countries</div>

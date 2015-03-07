@@ -1,3 +1,18 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="com.gamego.db.*" %>
+<%@ page import="com.gamego.game.*" %>
+<%
+	int gameID = Integer.parseInt(request.getParameter("id"));
+
+	Database db = new Database();
+	Game game = db.selectGame(gameID);
+	
+	if(game == null)
+		return;
+%>
 <!DOCTYPE html>
 <!-- This site was created in Webflow. http://www.webflow.com-->
 <!-- Last Published: Fri Mar 06 2015 04:31:06 GMT+0000 (UTC) -->
@@ -37,18 +52,21 @@
   <div class="w-container game-container">
     <div class="w-row game-row-1">
       <div class="w-col w-col-9 game-info-col-1">
-        <h1>Game Name Here</h1><img class="game-image" src="https://d3e54v103j8qbb.cloudfront.net/img/image-placeholder.svg" alt="image-placeholder.svg">
+        <h1><%=game.getTitle() %></h1><img class="game-image" src="https://d3e54v103j8qbb.cloudfront.net/img/image-placeholder.svg" alt="image-placeholder.svg">
         <h1>Description</h1>
-        <div class="game-description">This is the game Description.&nbsp;This is the game Description.This is the game Description.This is the game Description.This is the game Description.This is the game Description.This is the game Description.This is the game Description.This is the game Description.This is the game Description.This is the game Description.This is the game Description.This is the game Description.This is the game Description.This is the game Description.</div>
+        <div class="game-description"><%=game.getDescription() %></div>
       </div>
       <div class="w-col w-col-3 game-info-col-2">
-        <div class="game-info"><strong>Genre:</strong> Action
+        <div class="game-info"><strong>Genre:</strong> <%=game.getGenreString() %>
           <br>
-          <br><strong>Release Date</strong>: August 2007
+          <br><strong>Release Date</strong>: <%=game.getReleaseDate() %>
           <br>
-          <br><strong>Developer:</strong> Bungie
+          <br><strong>Developer:</strong> <%=game.getDeveloper().getName() %>
           <br>
-          <br><strong>Publisher: </strong>Apple&nbsp;</div>
+          <br><strong>Publisher:</strong> <%=game.getPublisher().getName() %>
+          <br>
+          <br><strong>ESRB Rating:</strong> <%=game.getESRBRating().toString() %>
+		</div>
         <div class="w-form">
           <form id="email-form" name="email-form" data-name="Email Form">
             <input class="w-button add-to-cart" id="For-adding-to-cart" type="submit" value="ADD TO CART" data-wait="Please wait...">
@@ -65,9 +83,11 @@
     <h1 class="game-rating-text">Average Rating:</h1>
     <h1 class="text-rating">4.5</h1>
   </div>
+  <!--
   <div class="w-section w-clearfix footer"><img class="footer-logo" src="images/game go logo.png" width="169" alt="54eb77b357cf2eaa083890a1_game%20go%20logo.png">
     <div class="footer-text">Copyright 2015. All rights reserved.&nbsp;All trademarks&nbsp;are property of their respective owners in the US and other countries</div>
   </div>
+  -->
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script type="text/javascript" src="js/webflow.js"></script>
   <!--[if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
