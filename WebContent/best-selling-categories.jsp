@@ -92,7 +92,7 @@ Statement stmt = conn.createStatement();
         		<h1 class="category-heading"><%= genreList.get(i) %></h1>
         		<ol>
         	<%
-        	gameQuery = "SELECT game.gameTitle ";
+        	gameQuery = "SELECT game.gameTitle, game.gameID ";
         	gameQuery += "FROM game ";
         	gameQuery += "INNER JOIN cartgame ON cartgame.gameID=game.gameID ";
         	gameQuery += "INNER JOIN gamegenre ON gamegenre.gameID=game.gameID ";
@@ -105,7 +105,7 @@ Statement stmt = conn.createStatement();
         		if (gameSet.next())
         		{
         			%>
-        			<li><%=gameSet.getString(1) %></li>
+        			<li><a href="game.jsp?id=<%=gameSet.getString(2) %>"><%=gameSet.getString(1) %></a></li>
         			<%
         		}
         		else

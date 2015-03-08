@@ -19,7 +19,7 @@ public class Database
 		{
 			String host = "jdbc:mysql://localhost:3306/gamego";
 			String username = "root";
-			String password = "root";
+			String password = "admin";
 			
 			pool = new DBConnectionPool(host, username, password);
 			conn = (pool != null ? pool.getConnection() : null);
