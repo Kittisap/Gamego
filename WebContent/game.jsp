@@ -5,13 +5,32 @@
 <%@ page import="com.gamego.db.*" %>
 <%@ page import="com.gamego.game.*" %>
 <%
-	int gameID = Integer.parseInt(request.getParameter("id"));
+	Database db = null;
+	Game game = null;
+	boolean hasError = true;
 
-	Database db = new Database();
-	Game game = db.selectGame(gameID);
+	String gameID = request.getParameter("id");
 	
-	if(game == null)
+	if(gameID != null)
+	{
+		db = new Database();
+
+		try
+		{
+			game = db.selectGame(Integer.parseInt(gameID));
+			
+			if(game != null)
+				hasError = false;
+		}
+		catch(Exception e) {}
+	}
+	
+	if(hasError)
+	{
+		response.sendRedirect("./index.html");
+		
 		return;
+	}
 %>
 <!DOCTYPE html>
 <!-- This site was created in Webflow. http://www.webflow.com-->
@@ -19,7 +38,7 @@
 <html data-wf-site="54eb722519500e4473ec8320" data-wf-page="54ece185aa70c2702274b165">
 <head>
   <meta charset="utf-8">
-  <title>Example Game Page - Game Go!</title>
+  <title>GameGo - <%=game.getTitle() %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Webflow">
   <link rel="stylesheet" type="text/css" href="css/normalize.css">
@@ -52,7 +71,7 @@
   <div class="w-container game-container">
     <div class="w-row game-row-1">
       <div class="w-col w-col-9 game-info-col-1">
-        <h1><%=game.getTitle() %></h1><img class="game-image" src="https://d3e54v103j8qbb.cloudfront.net/img/image-placeholder.svg" alt="image-placeholder.svg">
+        <h1><%=game.getTitle() %></h1><div class="game-image-container"><img class="game-image" src="<%=game.getBoxArtPath() %>" /></div>
         <h1>Description</h1>
         <div class="game-description"><%=game.getDescription() %></div>
       </div>

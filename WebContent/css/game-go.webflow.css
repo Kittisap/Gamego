@@ -450,10 +450,14 @@ p {
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.72);
 }
+.game-image-container {
+	width: 500px;
+	margin-left: 33px;
+}
 .game-image {
-  width: 500px;
-  height: 300px;
-  margin-left: 33px;
+	/*display: block;
+	margin: 0 auto;*/
+	margin-left: 11px;
 }
 .game-description {
   margin: 12px 16px 21px 44px;

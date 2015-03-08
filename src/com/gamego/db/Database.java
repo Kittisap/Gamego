@@ -104,8 +104,9 @@ public class Database
 			{
 				String sql = "SELECT game.gameID, game.gameTitle, " + 
 						"game.gameDescription, game.gameReleaseDate, " + 
-						"game.gameStock, game.gamePrice, developer.*, " + 
-						"publisher.*, esrbrating.* " + 
+						"game.gameBoxArtPath, game.gameStock, " + 
+						"game.gamePrice, developer.*, publisher.*, " + 
+						"esrbrating.* " + 
 						"FROM game " + 
 						"LEFT JOIN developer " + 
 						"ON game.gameDeveloper = developer.developerID " + 
@@ -123,6 +124,7 @@ public class Database
 					String gameTitle = gameRS.getString("gameTitle");
 					String gameDescription = gameRS.getString("gameDescription");
 					String gameReleaseDate = gameRS.getString("gameReleaseDate");
+					String gameBoxArtPath = gameRS.getString("gameBoxArtPath");
 					int gameStock = gameRS.getInt("gameStock");
 					float gamePrice = gameRS.getFloat("gamePrice");
 					
@@ -140,11 +142,6 @@ public class Database
 					// Create the publisher.
 					Publisher publisher = new Publisher(publisherID, publisherName);
 					
-					// Genres
-					Vector<Genre> genres = new Vector<Genre>();
-					int genreID = 0;
-					String genreName = "Unknown";
-					
 					// ESRB Rating Attributes
 					int esrbRatingID = gameRS.getInt("esrbRatingID");
 					String esrbRatingName = gameRS.getString("esrbRatingName");
@@ -153,6 +150,11 @@ public class Database
 					// Create the ESRB Rating.
 					ESRBRating esrbRating = new ESRBRating(esrbRatingID, 
 							esrbRatingName, esrbRatingAlias);
+					
+					// Genres
+					Vector<Genre> genres = new Vector<Genre>();
+					int genreID = 0;
+					String genreName = "Unknown";
 
 					sql = "SELECT * " + 
 							"FROM genre " + 
@@ -174,7 +176,7 @@ public class Database
 					// Create the game.
 					game = new Game(gameID, gameTitle, gameDescription, 
 							developer, publisher, genres, gameReleaseDate, 
-							esrbRating, gameStock, gamePrice);
+							esrbRating, gameBoxArtPath, gameStock, gamePrice);
 				}
 			}
 		}
