@@ -1,3 +1,34 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@ page import="java.util.*" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="com.gamego.db.*" %>
+<%@ page import="com.gamego.game.*" %>
+<%@ page import="com.gamego.cart.*" %>
+<%@ page import="java.text.DecimalFormat" %>
+
+<jsp:useBean id="cart" class="com.gamego.cart.CartBean" scope="session" />
+<jsp:useBean id="user" class="com.gamego.user.User" scope="session" />
+<%
+Database db = new Database();
+String[] idList = new String[0];
+Game[] gameList = new Game[0];
+float totalPrice = 0;
+
+try
+{
+	cart.addGame(request.getParameter("gameId"));
+	idList = cart.getCart();
+	gameList = new Game[idList.length];
+	for (int i = 0; i < gameList.length; i++)
+	{
+		gameList[i] = db.selectGame(Integer.parseInt(idList[i]));
+	}
+}
+catch(Exception e){}
+%>
+
 <!DOCTYPE html>
 <!-- This site was created in Webflow. http://www.webflow.com-->
 <!-- Last Published: Fri Mar 06 2015 04:31:06 GMT+0000 (UTC) -->
@@ -38,32 +69,34 @@
     <div class="your-cart-text"><strong>Your Cart</strong>
     </div>
     <ul class="w-list-unstyled list-of-cart-items">
-      <li class="w-clearfix"><img class="cart-item-image-example" src="https://d3e54v103j8qbb.cloudfront.net/img/image-placeholder.svg" alt="image-placeholder.svg">
-        <div class="cart-item-name-example">This is the name of the image</div>
-        <div class="cart-item-price-example">$19.99</div>
-        <div class="w-form quantity-wrapper">
-          <form id="email-form" name="email-form" data-name="Email Form">
-            <select class="w-select cart-item-quantity" id="field" name="field">
-              <option value="">Select one...</option>
-              <option value="First">First Choice</option>
-              <option value="Second">Second Choice</option>
-              <option value="Third">Third Choice</option>
-            </select>
-          </form>
-          <div class="w-form-done">
-            <p>Thank you! Your submission has been received!</p>
-          </div>
-          <div class="w-form-fail">
-            <p>Oops! Something went wrong while submitting the form :(</p>
-          </div>
-        </div>
-      </li>
-      <li></li>
-      <li></li>
+    <%
+    try
+    {
+        for (int i = 0; i < gameList.length; i++)
+        {
+        	totalPrice += gameList[i].getPrice();
+        	if(gameList[i].getBoxArtPath().length() > 0)
+        	%>
+        	<li class="w-clearfix"><img class="cart-item-image-example" src="<%=gameList[i].getBoxArtPath() %>">
+        	<div class="cart-item-name-example"><%=gameList[i].getTitle() %></div>
+        	<div class="cart-item-price-example">$<%=gameList[i].getPrice() %></div>
+        	</li>
+        	<%
+        }
+    }
+    catch(Exception e) {}
+    DecimalFormat df = new DecimalFormat("#.00");
+    String priceString = df.format(totalPrice);
+    
+    %>
+    	<li class="w-clearfix">
+    		<div class="cart-item-name-example">TOTAL PRICE: $<%=priceString %></div>
+    	</li>
     </ul>
     <div class="w-form">
-      <form class="w-clearfix" id="email-form-2" name="email-form-2" data-name="Email Form 2">
-        <input class="w-button cart-checkout-button" type="submit" value="Submit" data-wait="Please wait...">
+      <form class="w-clearfix" id="email-form-2" name="email-form-2" data-name="Email Form 2" type=POST action=cartServlet.jsp>
+        <input class="w-button cart-checkout-button" type="submit" value="Purchase">
+        <input type="hidden" name="amount" value="<%=priceString %>" />
       </form>
       <div class="w-form-done">
         <p>Thank you! Your submission has been received!</p>

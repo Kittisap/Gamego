@@ -86,8 +86,9 @@
           <br><strong>ESRB Rating:</strong> <%=game.getESRBRating().toString() %>
 		</div>
         <div class="w-form">
-          <form id="email-form" name="email-form" data-name="Email Form">
-            <input class="w-button add-to-cart" id="For-adding-to-cart" type="submit" value="ADD TO CART" data-wait="Please wait...">
+          <form id="email-form" name="email-form" data-name="Email Form" type=POST action=cart.jsp>
+            <input class="w-button add-to-cart" id="For-adding-to-cart" type=submit value="ADD TO CART">
+            <input type="hidden" name="gameId" value="<%=game.getID() %>" />
           </form>
           <div class="w-form-done">
             <p>Thank you! Your submission has been received!</p>
