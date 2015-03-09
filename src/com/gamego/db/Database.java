@@ -2,9 +2,7 @@ package com.gamego.db;
 
 import java.util.*;
 import java.sql.*;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+
 import com.gamego.user.*;
 import com.gamego.game.*;
 
@@ -84,6 +82,56 @@ public class Database
 		}
 		
 		return isRegistered;
+	}
+	
+	public void addCart(String[] gameIds, int customerId)
+	{
+		Statement stmt = null;
+		ResultSet result = null;
+		String query;
+		int cartId = 0;
+		try 
+		{
+			stmt = conn.createStatement();
+			query = "SELECT cardId ";
+			query += "FROM cart ";
+			query += "WHERE customerId=" + customerId;
+			
+			result = stmt.executeQuery(query);
+			if(result.next())
+			{
+				cartId = result.getInt(1);
+			}
+			else
+			{
+				query = "INSERT INTO cart ";
+				query += "VALUES(null,"+ customerId +",null) ";
+				stmt.executeUpdate(query);
+				query = "SELECT cardId ";
+				query += "FROM cart ";
+				query += "WHERE customerId=" + customerId;
+				result = stmt.executeQuery(query);
+				if(result.next())
+				{
+					cartId = result.getInt(1);
+				}
+			}
+			if (cartId == 0)
+			{
+				return;
+			}
+			for (int i = 0; i < gameIds.length; i++)
+			{
+				query = "INSERT INTO cargame ";
+				query += "VALUES("+ cartId +"," + gameIds[i] + ")";
+				stmt.executeUpdate(query);
+			}
+		} 
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public Game selectGame(int gameID)
