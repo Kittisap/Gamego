@@ -7,7 +7,7 @@
 <%@ page import="com.gamego.game.*" %>
 
 <%
-final int GAME_GENRES = 5;
+final int GAME_GENRES = 6;
 final int GAMES_SHOWN = 5;
 String url = "jdbc:mysql://localhost:3306/gamego";
 String username = "root";
@@ -87,8 +87,15 @@ Statement stmt = conn.createStatement();
     	ResultSet gameSet;
     	for(int i = 0; i < genreList.size(); i++)
     	{
+    		if (i == 3)
+    		{
+    			%>
+    			</div>
+    			<div class="w-row">
+    			<%
+    		}
     		%>
-    		<div class="w-col w-col-3 <%= genreList.get(i) %>-col">
+    		<div class="w-col w-col-4 <%= genreList.get(i) %>-col">
         		<h1 class="category-heading"><%= genreList.get(i) %></h1>
         		<ol>
         	<%

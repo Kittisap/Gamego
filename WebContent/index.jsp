@@ -7,6 +7,7 @@
 <%@ page import="com.gamego.game.*" %>
 
 <%
+final int TOP_GAMES = 10;
 final int BIWEEKLY_GAMES = 5;
 String url = "jdbc:mysql://localhost:3306/gamego";
 String username = "root";
@@ -14,6 +15,8 @@ String passwd = "admin";
 DBConnectionPool connPool = new DBConnectionPool(url, username, passwd);
 Connection conn = connPool.getConnection();
 Statement stmt = conn.createStatement();
+String query;
+ResultSet gameSet;
 %>
 
 <!DOCTYPE html>
@@ -70,41 +73,54 @@ Statement stmt = conn.createStatement();
     <div class="what-s-hot-text-block"><strong class="what-s-hot-text">What's <span class="hot-text">HOT</span></strong>
     </div>
     <div class="w-row">
-      <div class="w-col w-col-9">
-        <ol class="w-list-unstyled">
-          <li class="list-item-1">
-            <a class="w-inline-block" href="#"></a>
-            <div>Insert stars here. Also short description</div>
-          </li>
-          <li class="list-item-2">
-            <a class="w-inline-block" href="#"></a>
-            <div>Insert stars here. Also short description</div>
-          </li>
-          <li class="list-item-3">
-            <a class="w-inline-block" href="#"></a>
-            <div>Insert stars here. Also short description</div>
-          </li>
-        </ol>
-      </div>
-      <div class="w-col w-col-3">
-        <ol class="w-list-unstyled top-7-games-list">
-          <li><a href="#">Game #4</a>
-          </li>
-          <li><a href="#">Game #5</a>
-          </li>
-          <li><a href="#">Game #6</a>
-          </li>
-          <li><a href="#">Game #7</a>
-          </li>
-          <li><a href="#">Game #8</a>
-          </li>
-          <li><a href="#">Game #9</a>
-          </li>
-          <li><a href="#">Game #10</a>
-          </li>
-        </ol>
+	    <div class="w-col w-col-6">
+	        <ol>
+    <%
+    query = "SELECT game.gameTitle, game.gameID ";
+    query += "FROM game ";
+    query += "INNER JOIN cartgame ON cartgame.gameID=game.gameID ";
+	query += "GROUP BY game.gameTitle ";
+	query += "ORDER BY count(game.gameTitle) DESC;";
+    try
+    {
+    	gameSet = stmt.executeQuery(query);
+    	for (int i = 0; i < TOP_GAMES/2; i++)
+    	{
+			if (gameSet.next())
+			{
+				%>
+				
+	   			<li><a href="game.jsp?id=<%=gameSet.getString(2) %>"><%=gameSet.getString(1) %></a></li>
+	   			<%
+			}
+			else
+				break;
+    	}
+    	%>
+    		</ol>
+    	</div>
+    	<div class="w-col w-col-6">
+    		<ol start="<%=TOP_GAMES/2+1 %>">
+    	<%
+    	for (int i = 0; i < TOP_GAMES/2; i++)
+    	{
+			if (gameSet.next())
+			{
+				%>
+				
+	   			<li><a href="game.jsp?id=<%=gameSet.getString(2) %>"><%=gameSet.getString(1) %></a></li>
+	   			<%
+			}
+			else
+				break;
+    	}
+    }
+    catch(Exception e){}
+    %>
+            </ol>
       </div>
     </div>
+
     <a class="w-inline-block link-block-to-categories" href="best-selling-categories.jsp">
       <div>List of Best Selling Genres</div>
     </a>
@@ -114,8 +130,6 @@ Statement stmt = conn.createStatement();
     </div>
     <ol>
     <%
-    String query;
-    ResultSet gameSet;
     query = "SELECT game.gameTitle, game.gameID ";
     query += "FROM game ";
     query += "INNER JOIN cartgame ON cartgame.gameID=game.gameID ";
