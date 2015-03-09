@@ -8,7 +8,7 @@ public class Genre
 	public Genre()
 	{
 		m_id = 0;
-		m_name = "Unknown";
+		m_name = "N/A";
 	}
 	
 	public Genre(int id, String name)

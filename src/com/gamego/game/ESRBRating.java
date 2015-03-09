@@ -9,8 +9,8 @@ public class ESRBRating
 	public ESRBRating()
 	{
 		m_id = 0;
-		m_name = "Unknown";
-		m_alias = "Unknown";
+		m_name = "N/A";
+		m_alias = "N/A";
 	}
 	
 	public ESRBRating(int id, String name, String alias)

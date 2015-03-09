@@ -26,7 +26,7 @@
 	
 	if(hasError)
 	{
-		response.sendRedirect("./index.html");
+		response.sendRedirect("./index.jsp");
 		
 		return;
 	}
@@ -83,7 +83,7 @@
           <br>
           <br><strong>Publisher:</strong> <%=game.getPublisher().getName() %>
           <br>
-          <br><strong>ESRB Rating:</strong> <%=game.getESRBRating().toString() %>
+          <br><strong>ESRB Rating:</strong> <%=game.getESRBRating().getName() %>
 		</div>
         <div class="w-form">
           <form id="email-form" name="email-form" data-name="Email Form" type=POST action=cart.jsp>

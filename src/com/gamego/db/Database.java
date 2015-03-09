@@ -9,9 +9,6 @@ import com.gamego.search.*;
 
 public class Database
 {
-	public static final int PAGE_ONE = 1;
-	public static final int SEARCH_LIMIT = 10;
-
 	private DBConnectionPool pool = null;
 	private Connection conn = null;
 	
@@ -264,45 +261,104 @@ public class Database
 	
 	public Search performSearch(String query)
 	{
-		return performSearch(query, PAGE_ONE);
+		return performSearch(query, Search.DEFAULT_GENRE_ID, 
+				Search.DEFAULT_PAGE);
 	}
 	
-	public Search performSearch(String query, int page)
+	public Search performSearch(String query, String genreID, String page)
+	{
+		int numericGenreID = Search.DEFAULT_GENRE_ID;
+		int numericPage = Search.DEFAULT_PAGE;
+		
+		try
+		{
+			if(genreID != null)
+				numericGenreID = Integer.parseInt(genreID);
+			
+			if(page != null)
+				numericPage = Integer.parseInt(page);
+		}
+		catch(Exception e) {}
+		
+		return performSearch(query, numericGenreID, numericPage);
+	}
+	
+	public Search performSearch(String query, int genreID, int page)
 	{
 		if(conn == null)
 			return null;
 		
 		Search search = null;
 		Statement stmt = null;
-		ResultSet rs = null;
+		ResultSet countRS = null;
+		ResultSet searchRS = null;
 		
 		try
 		{
-			search = new Search(query);
+			search = new Search(query, genreID);
 			stmt = conn.createStatement();
 			
-			if(stmt != null)
-			{
-				if(page < PAGE_ONE)
-					page = PAGE_ONE;
-
-				int offset = (page - 1) * SEARCH_LIMIT;
-
-				String sql = "SELECT gameID " + 
-						"FROM game " + 
-						"WHERE gameTitle " + 
-						"LIKE '%" + query + "%' " + 
-						"ORDER BY gameTitle " + 
-						"LIMIT " + offset + ", " + SEARCH_LIMIT;
+			if(stmt != null && !search.getQuery().isEmpty())
+			{	
+				String sql = "";
 				
-				rs = stmt.executeQuery(sql);
+				if(search.getGenreID() == Search.DEFAULT_GENRE_ID)
+				{
+					sql = "SELECT COUNT(*) as numRows " + 
+							"FROM game " + 
+							"WHERE gameTitle " + 
+							"LIKE '%" + search.getQuery() + "%'";
+				}
+				else
+				{
+					sql = "SELECT COUNT(*) as numRows " + 
+							"FROM game " + 
+							"WHERE game.gameID " +
+							"IN (SELECT gamegenre.gameID " + 
+								"FROM gamegenre " + 
+								"WHERE gamegenre.genreID = " + search.getGenreID() + ") " + 
+							"AND game.gameTitle " + 
+							"LIKE '%" + search.getQuery() + "%'";
+				}
+				
+				countRS = stmt.executeQuery(sql);
+				
+				if(countRS.next())
+					search.setTotalResults(countRS.getInt("numRows"));
+				
+				search.setCurrentPage(page);
+				
+				if(search.getGenreID() == Search.DEFAULT_GENRE_ID)
+				{
+					sql = "SELECT gameID " + 
+							"FROM game " + 
+							"WHERE gameTitle " + 
+							"LIKE '%" + search.getQuery() + "%' " + 
+							"ORDER BY gameTitle " + 
+							"LIMIT " + search.getOffset() + ", " + search.getLimit();
+				}
+				else
+				{
+					sql = "SELECT game.gameID " + 
+							"FROM game " + 
+							"WHERE game.gameID " + 
+							"IN (SELECT gamegenre.gameID " + 
+								"FROM gamegenre " + 
+								"WHERE gamegenre.genreID = " + search.getGenreID() + ") " + 
+							"AND game.gameTitle " + 
+							"LIKE '%" + search.getQuery() + "%' " + 
+							"ORDER BY game.gameTitle " + 
+							"LIMIT " + search.getOffset() + ", " + search.getLimit();
+				}
+				
+				searchRS = stmt.executeQuery(sql);
 				
 				int gameID = 0;
 				Game gameResult = null;
 				
-				while(rs.next())
+				while(searchRS.next())
 				{
-					gameID = rs.getInt("gameID");
+					gameID = searchRS.getInt("gameID");
 					gameResult = selectGame(gameID);
 					
 					if(gameResult != null)
@@ -313,8 +369,98 @@ public class Database
 		catch(Exception e) {}
 		finally
 		{
+			try
+			{
+				if(countRS != null)
+					countRS.close();
+			}
+			catch(Exception e) {}
+
+			try
+			{
+				if(searchRS != null)
+					searchRS.close();
+			}
+			catch(Exception e) {}
+			
+			try
+			{
+				if(stmt != null)
+					stmt.close();
+			}
+			catch(Exception e) {}
+			
+			close();
 		}
 		
 		return search;
+	}
+	
+	public String getGenreDropdownHTML(int selectedGenreID)
+	{
+		String html = "";
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		if(conn != null)
+		{
+			try
+			{
+				stmt = conn.createStatement();
+				
+				if(stmt != null)
+				{
+					int genreID = 0;
+					String genreName = "";
+					
+					html = "<div class=\"searchMargin\">";
+					html += "<label for=\"genre\">Genre</label>";
+					html += "<select id=\"genre\" name=\"genreID\">";
+					html += "<option value=\"0\">All</option>";
+
+					String sql = "SELECT * " + 
+							"FROM genre " + 
+							"ORDER BY genreName";
+
+					rs = stmt.executeQuery(sql);
+					
+					while(rs.next())
+					{
+						genreID = rs.getInt("genreID");
+						genreName = rs.getString("genreName");
+						
+						if(genreID == selectedGenreID)
+							html += "<option value=\"" + genreID + "\" selected>" + genreName + "</option>";
+						else
+							html += "<option value=\"" + genreID + "\">" + genreName + "</option>";
+					}
+					
+					html += "</select>";
+					html += "</div>";
+				}
+			}
+			catch(Exception e) {}
+			finally
+			{
+				try
+				{
+					if(rs != null)
+						rs.close();
+				}
+				catch(Exception e) {}
+				
+				try
+				{
+					if(stmt != null)
+						stmt.close();
+				}
+				catch(Exception e) {}
+				
+				close();
+			}
+		}
+		
+		return html;
 	}
 }

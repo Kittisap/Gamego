@@ -8,7 +8,7 @@ public class Publisher
 	public Publisher()
 	{
 		m_id = 0;
-		m_name = "Unknown";
+		m_name = "N/A";
 	}
 	
 	public Publisher(int id, String name)

@@ -4,6 +4,8 @@ import java.util.*;
 
 public class Game
 {
+	public static final int SHORT_TITLE_LENGTH = 53;
+	
 	private int m_id;
 	private String m_title;
 	private String m_description;
@@ -19,12 +21,12 @@ public class Game
 	public Game()
 	{
 		m_id = 0;
-		m_title = "Unknown";
-		m_description = "None";
+		m_title = "N/A";
+		m_description = "N/A";
 		m_developer = new Developer();
 		m_publisher = new Publisher();
 		m_genres = new Vector<Genre>();
-		m_releaseDate = "Unknown";
+		m_releaseDate = "N/A";
 		m_esrbRating = new ESRBRating();
 		m_boxArtPath = "https://d3e54v103j8qbb.cloudfront.net/img/image-placeholder.svg";
 		m_stock = 0;
@@ -79,6 +81,19 @@ public class Game
 	public String getTitle()
 	{
 		return m_title;
+	}
+	
+	public String getShortTitle()
+	{
+		String shortTitle = m_title;
+
+		if(m_title != null && m_title.length() > SHORT_TITLE_LENGTH)
+		{
+			shortTitle = shortTitle.substring(0, SHORT_TITLE_LENGTH);
+			shortTitle += "...";
+		}
+		
+		return shortTitle;
 	}
 	
 	public boolean setDescription(String description)
@@ -143,7 +158,7 @@ public class Game
 	
 	public String getGenreString()
 	{
-		String genreString = "Unknown";
+		String genreString = "N/A";
 		
 		if(m_genres.size() > 0)
 		{

@@ -8,7 +8,7 @@ public class Developer
 	public Developer()
 	{
 		m_id = 0;
-		m_name = "Unknown";
+		m_name = "N/A";
 	}
 	
 	public Developer(int id, String name)
