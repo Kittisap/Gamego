@@ -1,6 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="com.gamego.db.*" %>
 <%@ page import="com.gamego.search.*" %>
+
+<%
+	String query = request.getParameter("q");
+	String resultPage = request.getParameter("page");
+	
+	Search search = null;
+	boolean hasError = true;
+	
+	if(query != null)
+	{
+		Database db = new Database();
+		
+		try
+		{
+			if(resultPage == null)
+				search = db.performSearch(query);
+			else
+				search = db.performSearch(query, Integer.parseInt(resultPage));
+			
+			if(search != null)
+				hasError = false;
+		}
+		catch(Exception e) {}
+	}
+	
+	if(hasError)
+	{
+		response.sendRedirect("./index.html");
+		
+		return;
+	}
+%>
+
 <!DOCTYPE html>
 <!-- This site was created in Webflow. http://www.webflow.com-->
 <!-- Last Published: Fri Mar 06 2015 04:31:06 GMT+0000 (UTC) -->
@@ -39,7 +73,7 @@
   </div>
   <div class="w-container genre-selector-box">
     <div class="w-form genre-form-wrapper">
-      <form id="email-form" name="email-form" data-name="Email Form">
+      <form id="email-form" name="email-form" data-name="Email Form" method="get" action="search.jsp">
         <div class="w-row">
           <div class="w-col w-col-3">
             <div class="w-checkbox w-clearfix">
@@ -82,7 +116,7 @@
             </div>
           </div>
         </div>
-        <input class="w-input game-search" id="search-Game" type="text" placeholder="Search for a Title, Developer, Publisher, etc.." name="search-Game" required="required" data-name="search Game">
+        <input class="w-input game-search" id="search-Game" type="text" placeholder="Search for a Title, Developer, Publisher, etc.." name="q" required="required" data-name="search Game" value="<%=search.getQuery() %>" />
       </form>
       <div class="w-form-done">
         <p>Thank you! Your submission has been received!</p>
@@ -94,6 +128,7 @@
   </div>
   <div class="w-container search-page-container">
     <h2>Results</h2>
+    <%=search.getResultHTML() %>
     <!--
     <ul>
       <li class="w-clearfix">
@@ -111,7 +146,7 @@
     <div class="footer-text">Copyright 2015. All rights reserved.&nbsp;All trademarks&nbsp;are property of their respective owners in the US and other countries</div>
   </div>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="js/webflow.js"></script>
+  <!-- <script type="text/javascript" src="js/webflow.js"></script> -->
   <!--[if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
 </body>
 </html>

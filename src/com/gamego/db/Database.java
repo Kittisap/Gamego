@@ -7,9 +7,13 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import com.gamego.user.*;
 import com.gamego.game.*;
+import com.gamego.search.*;
 
 public class Database
 {
+	public static final int PAGE_ONE = 1;
+	public static final int SEARCH_LIMIT = 10;
+
 	private DBConnectionPool pool = null;
 	private Connection conn = null;
 	
@@ -208,5 +212,61 @@ public class Database
 		}
 		
 		return game;
+	}
+	
+	public Search performSearch(String query)
+	{
+		return performSearch(query, PAGE_ONE);
+	}
+	
+	public Search performSearch(String query, int page)
+	{
+		if(conn == null)
+			return null;
+		
+		Search search = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		try
+		{
+			search = new Search(query);
+			stmt = conn.createStatement();
+			
+			if(stmt != null)
+			{
+				if(page < PAGE_ONE)
+					page = PAGE_ONE;
+
+				int offset = (page - 1) * SEARCH_LIMIT;
+
+				String sql = "SELECT gameID " + 
+						"FROM game " + 
+						"WHERE gameTitle " + 
+						"LIKE '%" + query + "%' " + 
+						"ORDER BY gameTitle " + 
+						"LIMIT " + offset + ", " + SEARCH_LIMIT;
+				
+				rs = stmt.executeQuery(sql);
+				
+				int gameID = 0;
+				Game gameResult = null;
+				
+				while(rs.next())
+				{
+					gameID = rs.getInt("gameID");
+					gameResult = selectGame(gameID);
+					
+					if(gameResult != null)
+						search.addResult(gameResult);
+				}
+			}
+		}
+		catch(Exception e) {}
+		finally
+		{
+		}
+		
+		return search;
 	}
 }

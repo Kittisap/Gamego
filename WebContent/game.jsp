@@ -5,7 +5,6 @@
 <%@ page import="com.gamego.db.*" %>
 <%@ page import="com.gamego.game.*" %>
 <%
-	Database db = null;
 	Game game = null;
 	boolean hasError = true;
 
@@ -13,7 +12,7 @@
 	
 	if(gameID != null)
 	{
-		db = new Database();
+		Database db = new Database();
 
 		try
 		{
