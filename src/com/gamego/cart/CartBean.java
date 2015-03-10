@@ -17,7 +17,14 @@ public class CartBean implements Serializable
 	public void addGame(String gameId)
 	{
 		if(!cart.contains(gameId))
-			cart.add(gameId);
+		{
+			try
+			{
+				Integer.parseInt(gameId);
+				cart.add(gameId);
+			}
+			catch (Exception e){}
+		}
 	}
 	
 	public String[] getCart()
@@ -32,7 +39,7 @@ public class CartBean implements Serializable
 	
 	public void clear()
 	{
-		cart.clear();
+		cart.removeAllElements();
 	}
 
 }
