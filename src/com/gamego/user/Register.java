@@ -23,7 +23,7 @@ public class Register extends HttpServlet {
 	{
 		if(request != null && response != null)
 		{
-			RequestDispatcher rd = request.getRequestDispatcher("register.html");
+			RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
 			
 			if(rd != null)
 			{

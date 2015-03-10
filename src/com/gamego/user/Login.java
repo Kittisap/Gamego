@@ -23,7 +23,7 @@ public class Login extends HttpServlet
 	protected void doGet(HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException
 	{	
-		RequestDispatcher rd = request.getRequestDispatcher("login.html");
+		RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
 		
 		if(rd != null)
 		{
