@@ -1,6 +1,9 @@
 package com.gamego.db;
 
 import java.util.*;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.sql.*;
 
 import com.gamego.user.*;
@@ -38,7 +41,7 @@ public class Database
 	
 	public Boolean registerUser(User user)
 	{
-		if(conn == null || user == null || !user.isInitialized())
+		if(conn == null || user == null || !user.isVerified())
 			return false;
 		
 		Statement stmt = null;
@@ -51,12 +54,22 @@ public class Database
 			
 			if(stmt != null)
 			{
-				rs = stmt.executeQuery("SELECT username FROM users WHERE username = '" + user.getUsername() + "'");
+				String sql = "SELECT username " + 
+						"FROM member " + 
+						"WHERE username = '" + user.getUsername() + "'";
+
+				rs = stmt.executeQuery(sql);
 				
 				if(rs != null && !rs.next())
 				{
-					long timestamp = System.currentTimeMillis() / 1000L;
-					int rowsAffected = stmt.executeUpdate("INSERT INTO users (userID, username, password, registeredTime, lastLoginTime) VALUES (NULL, '" + user.getUsername() + "', '" + user.getPassword() + "', " + timestamp + ", 0)");
+					sql = "INSERT INTO member " + 
+							"(customerId, username, password, email) " + 
+							"VALUES (NULL, '" + 
+							user.getUsername() + "', '" + 
+							user.getPassword() + "', '" + 
+							user.getEmail() + "')";
+
+					int rowsAffected = stmt.executeUpdate(sql);
 					
 					isRegistered = (rowsAffected > 0 ? true : false);
 				}
@@ -83,6 +96,69 @@ public class Database
 		}
 		
 		return isRegistered;
+	}
+	
+	public boolean verifyUser(User user)
+	{
+		if(conn == null || user == null)
+			return false;
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		try
+		{
+			stmt = conn.createStatement();
+			
+			if(stmt != null)
+			{
+				String sql = "SELECT * " + 
+						"FROM member " + 
+						"WHERE username = '" + user.getUsername() + "'";
+
+				rs = stmt.executeQuery(sql);
+				
+				if(rs != null && rs.next())
+				{
+					int id = rs.getInt("customerId");
+					String username = rs.getString("username");
+					String password = rs.getString("password");
+					String email = rs.getString("email");
+					boolean isAdmin = rs.getInt("admin") == 1 ? true : false;
+					
+					if(user.getPassword().equals(password))
+					{	
+						user.setID(id);
+						user.setUsername(username);
+						user.setPassword(password);
+						user.setEmail(email);
+						user.setAdmin(isAdmin);
+						user.setVerified(true);
+					}
+				}
+			}
+		}
+		catch(Exception e) {}
+		finally
+		{
+			try
+			{
+				if(rs != null)
+					rs.close();
+			}
+			catch(Exception e) {}
+			
+			try
+			{
+				if(stmt != null)
+					stmt.close();
+			}
+			catch(Exception e) {}
+			
+			close();
+		}
+		
+		return user.isVerified();
 	}
 	
 	public void addCart(String[] gameIds, int customerId)

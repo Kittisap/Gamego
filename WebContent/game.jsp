@@ -38,32 +38,29 @@
 
   <div class="w-container game-container">
     <div class="w-row game-row-1">
-      <div class="w-col w-col-9 game-info-col-1">
-        <h1><%=game.getTitle() %></h1><div class="game-image-container"><img class="game-image" src="<%=game.getBoxArtPath() %>" /></div>
-        <h1>Description</h1>
+      <div class="w-col w-col-8 game-info-col-1">
+        <h2><%=game.getTitle() %></h2><br />
+        <div class="game-image-container"><img class="game-image" src="<%=game.getBoxArtPath() %>" /></div>
+        <h2>Description</h2>
         <div class="game-description"><%=game.getDescription() %></div>
       </div>
-      <div class="w-col w-col-3 game-info-col-2">
-        <div class="game-info"><strong>Genre:</strong> <%=game.getGenreString() %>
-          <br>
-          <br><strong>Release Date</strong>: <%=game.getReleaseDate() %>
-          <br>
-          <br><strong>Developer:</strong> <%=game.getDeveloper().getName() %>
-          <br>
-          <br><strong>Publisher:</strong> <%=game.getPublisher().getName() %>
-          <br>
-          <br><strong>ESRB Rating:</strong> <%=game.getESRBRating().getName() %>
+      <div class="w-col w-col-4 game-info-col-2">
+        <div class="game-info">
+			<strong>Genre:</strong> <%=game.getGenreString() %><br /><br />
+			<strong>Release Date</strong>: <%=game.getReleaseDate() %><br /><br />
+			<strong>Developer:</strong> <%=game.getDeveloper().getName() %><br /><br />
+			<strong>Publisher:</strong> <%=game.getPublisher().getName() %><br /><br />
+			<strong>ESRB Rating:</strong> <%=game.getESRBRating().getName() %><br /><br />
+			<strong>Average User Rating:</strong> 4.5
 		</div>
         <div class="w-form">
-          <form id="email-form" name="email-form" data-name="Email Form" type=POST action=cart.jsp>
-            <input class="w-button add-to-cart" id="For-adding-to-cart" type=submit value="ADD TO CART">
+          <form id="email-form" type="post" action="./cart.jsp">
+            <input class="pure-button pure-button-primary add-to-cart" type="submit" value="Add to Cart" />
             <input type="hidden" name="gameId" value="<%=game.getID() %>" />
           </form>
         </div>
       </div>
     </div>
-    <h1 class="game-rating-text">Average Rating:</h1>
-    <h1 class="text-rating">4.5</h1>
   </div>
 
 <jsp:include page="footer.jsp" />

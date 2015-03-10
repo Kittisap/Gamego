@@ -21,6 +21,9 @@ public class Register extends HttpServlet {
 	protected void doGet(HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException
 	{
+		if(User.isLoggedIn(request))
+			response.sendRedirect("./index.jsp");
+
 		if(request != null && response != null)
 		{
 			RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
@@ -37,18 +40,22 @@ public class Register extends HttpServlet {
 	protected void doPost(HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException
 	{
+		if(User.isLoggedIn(request))
+			response.sendRedirect("./index.jsp");
+
 		if(request != null && response != null)
 		{
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
 			String passwordConfirm = request.getParameter("passwordConfirm");
+			String email = request.getParameter("email");
 			
-			Database database = new Database();
-			User user = new User(username, password, passwordConfirm);
+			Database db = new Database();
+			User user = new User(username, password, passwordConfirm, email);
 			
-			if(database != null && database.registerUser(user))
+			if(db != null && db.registerUser(user))
 			{
-				RequestDispatcher rd = request.getRequestDispatcher("registerSuccess.html");
+				RequestDispatcher rd = request.getRequestDispatcher("registerSuccess.jsp");
 				
 				if(rd != null)
 				{

@@ -1,28 +1,83 @@
 package com.gamego.user;
 
+import java.io.IOException;
+import java.util.Date;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.codec.digest.*;
 
 public class User
 {
-	private String m_username = null;
-	private String m_password = null;
+	private int m_id;
+	private String m_username;
+	private String m_password;
+	private String m_email;
+	private boolean m_isAdmin;
+	private boolean m_isVerified;
 	
 	public User()
 	{
+		m_id = 0;
+		m_username = null;
+		m_password = null;
+		m_email = null;
+		m_isAdmin = false;
+		m_isVerified = false;
 	}
 	
+	// Used for login.
 	public User(String username, String password)
 	{
-		m_username = username;
-		m_password = hash(password);
+		this();
+		
+		setUsername(username);
+		setPassword(password);
 	}
 	
-	public User(String username, String password, String passwordConfirm)
+	// Used for registration.
+	public User(String username, 
+			String password, 
+			String passwordConfirm, 
+			String email)
 	{
+		this();
+		
+		setUsername(username);
+		setEmail(email);
+		
+		if(password != null && passwordConfirm != null && 
+				password.equals(passwordConfirm))
+		{
+			setPassword(password);
+			setVerified(true);
+		}
+	}
+	
+	public boolean setID(int id)
+	{
+		if(id <= 0)
+			return false;
+		
+		m_id = id;
+		
+		return true;
+	}
+	
+	public int getID()
+	{
+		return m_id;
+	}
+	
+	public boolean setUsername(String username)
+	{
+		if(username == null)
+			return false;
+		
 		m_username = username;
 		
-		if(password != null && passwordConfirm != null && password.equals(passwordConfirm))
-			m_password = hash(password);
+		return true;
 	}
 	
 	public String getUsername()
@@ -30,14 +85,54 @@ public class User
 		return m_username;
 	}
 	
+	public boolean setPassword(String password)
+	{
+		if(password == null)
+			return false;
+		
+		m_password = hash(password);
+		
+		return true;
+	}
+	
 	public String getPassword()
 	{
 		return m_password;
 	}
 	
-	public Boolean isInitialized()
+	public boolean setEmail(String email)
 	{
-		return m_username != null && m_password != null;
+		if(email == null)
+			return false;
+		
+		m_email = email;
+		
+		return true;
+	}
+	
+	public String getEmail()
+	{
+		return m_email;
+	}
+	
+	public void setAdmin(boolean isAdmin)
+	{
+		m_isAdmin = isAdmin;
+	}
+	
+	public boolean isAdmin()
+	{
+		return m_isAdmin;
+	}
+	
+	public void setVerified(boolean isVerified)
+	{
+		m_isVerified = isVerified;
+	}
+	
+	public boolean isVerified()
+	{
+		return m_isVerified;
 	}
 	
 	public static String hash(String str)
@@ -46,5 +141,18 @@ public class User
 			return null;
 		
 		return DigestUtils.sha256Hex(str);
+	}
+	
+	public static boolean isLoggedIn(HttpServletRequest request)
+	{
+		if(request != null)
+		{
+			User user = (User)request.getSession().getAttribute("user");
+			
+			if(user != null)
+				return true;
+		}
+		
+		return false;
 	}
 }

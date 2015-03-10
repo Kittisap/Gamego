@@ -23,9 +23,9 @@ ResultSet gameSet;
 
   <div class="w-container search-container">
     <div class="w-form">
-      <form class="w-clearfix search-bar-form" id="email-form" name="email-form" data-name="Email Form" method="get" action="search.jsp">
-        <input class="w-input search-bar-field" id="SearchItem" type="text" placeholder="Search for a game..." name="q" data-name="SearchItem" autofocus="autofocus">
-        <input class="w-button search-bar-button" type="submit" value="Search" data-wait="Please wait...">
+      <form class="w-clearfix search-bar-form" method="get" action="./search.jsp">
+        <input class="w-input search-bar-field" type="text" placeholder="Search for a game..." name="q" autofocus="autofocus" />
+        <input class="w-button search-bar-button" type="submit" value="Search" />
       </form>
     </div>
   </div>
