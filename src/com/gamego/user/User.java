@@ -14,6 +14,7 @@ public class User
 	private String m_username;
 	private String m_password;
 	private String m_email;
+	private Date m_dateRegistered;
 	private boolean m_isAdmin;
 	private boolean m_isVerified;
 	
@@ -23,6 +24,7 @@ public class User
 		m_username = null;
 		m_password = null;
 		m_email = null;
+		m_dateRegistered = null;
 		m_isAdmin = false;
 		m_isVerified = false;
 	}
@@ -115,6 +117,21 @@ public class User
 		return m_email;
 	}
 	
+	public boolean setDateRegistered(Date dateRegistered)
+	{
+		if(dateRegistered == null)
+			return false;
+		
+		m_dateRegistered = dateRegistered;
+		
+		return true;
+	}
+	
+	public Date getDateRegistered()
+	{
+		return m_dateRegistered;
+	}
+	
 	public void setAdmin(boolean isAdmin)
 	{
 		m_isAdmin = isAdmin;
@@ -154,5 +171,13 @@ public class User
 		}
 		
 		return false;
+	}
+	
+	public static User getSessionUser(HttpServletRequest request)
+	{
+		if(request == null)
+			return null;
+		
+		return (User)request.getSession().getAttribute("user");
 	}
 }

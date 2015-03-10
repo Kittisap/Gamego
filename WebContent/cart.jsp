@@ -9,7 +9,7 @@
 <%@ page import="java.text.DecimalFormat" %>
 
 <jsp:useBean id="cart" class="com.gamego.cart.CartBean" scope="session" />
-<jsp:useBean id="user" class="com.gamego.user.User" scope="session" />
+
 <%
 Database db = new Database();
 String[] idList = new String[0];

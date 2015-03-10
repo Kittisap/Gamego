@@ -124,7 +124,9 @@ public class Database
 					String username = rs.getString("username");
 					String password = rs.getString("password");
 					String email = rs.getString("email");
+					Date dateRegisterd = rs.getDate("dateRegistered");
 					boolean isAdmin = rs.getInt("admin") == 1 ? true : false;
+					boolean isVerified = true;
 					
 					if(user.getPassword().equals(password))
 					{	
@@ -132,8 +134,9 @@ public class Database
 						user.setUsername(username);
 						user.setPassword(password);
 						user.setEmail(email);
+						user.setDateRegistered(dateRegisterd);
 						user.setAdmin(isAdmin);
-						user.setVerified(true);
+						user.setVerified(isVerified);
 					}
 				}
 			}
@@ -199,7 +202,7 @@ public class Database
 			}
 			for (int i = 0; i < gameIds.length; i++)
 			{
-				query = "INSERT INTO cargame ";
+				query = "INSERT INTO cartgame ";
 				query += "VALUES("+ cartId +"," + gameIds[i] + ")";
 				stmt.executeUpdate(query);
 			}
