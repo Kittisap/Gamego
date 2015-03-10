@@ -51,10 +51,10 @@
 			<strong>Developer:</strong> <%=game.getDeveloper().getName() %><br /><br />
 			<strong>Publisher:</strong> <%=game.getPublisher().getName() %><br /><br />
 			<strong>ESRB Rating:</strong> <%=game.getESRBRating().getName() %><br /><br />
-			<strong>Average User Rating:</strong> 4.5
+			<strong>Average User Rating:</strong> <%=game.getUserRating() %>
 		</div>
         <div class="w-form">
-          <form id="email-form" type="post" action="./cart.jsp">
+          <form id="email-form" method="post" action="./cart.jsp">
             <input class="pure-button pure-button-primary add-to-cart" type="submit" value="Add to Cart" />
             <input type="hidden" name="gameId" value="<%=game.getID() %>" />
           </form>

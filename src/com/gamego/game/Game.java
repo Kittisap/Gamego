@@ -14,6 +14,7 @@ public class Game
 	private Vector<Genre> m_genres;
 	private String m_releaseDate;
 	private ESRBRating m_esrbRating;
+	private float m_userRating;
 	private String m_boxArtPath;
 	private int m_stock;
 	private float m_price;
@@ -28,6 +29,7 @@ public class Game
 		m_genres = new Vector<Genre>();
 		m_releaseDate = "N/A";
 		m_esrbRating = new ESRBRating();
+		m_userRating = 0f;
 		m_boxArtPath = "https://d3e54v103j8qbb.cloudfront.net/img/image-placeholder.svg";
 		m_stock = 0;
 		m_price = 0.0f;
@@ -36,7 +38,8 @@ public class Game
 	
 	public Game(int id, String title, String description, Developer developer, 
 			Publisher publisher, Vector<Genre> genres, String releaseDate, 
-			ESRBRating esrbRating, String boxArtPath, int stock, float price)
+			ESRBRating esrbRating, float userRating, String boxArtPath, 
+			int stock, float price)
 	{
 		this();
 		
@@ -48,6 +51,7 @@ public class Game
 		setGenres(genres);
 		setReleaseDate(releaseDate);
 		setESRBRating(esrbRating);
+		setUserRating(userRating);
 		setBoxArtPath(boxArtPath);
 		setStock(stock);
 		setPrice(price);
@@ -201,6 +205,24 @@ public class Game
 	public ESRBRating getESRBRating()
 	{
 		return m_esrbRating;
+	}
+	
+	public boolean setUserRating(float userRating)
+	{
+		if(userRating < 1f || userRating > 5f)
+			return false;
+		
+		m_userRating = userRating;
+		
+		return true;
+	}
+	
+	public String getUserRating()
+	{
+		if(m_userRating < 1f)
+			return "N/A";
+		
+		return String.format("%.1f", m_userRating);
 	}
 	
 	public boolean setBoxArtPath(String boxArtPath)

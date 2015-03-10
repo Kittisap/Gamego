@@ -222,6 +222,7 @@ public class Database
 		Game game = null;
 		Statement stmt = null;
 		ResultSet gameRS = null;
+		ResultSet gameRatingRS = null;
 		ResultSet gameGenreRS = null;
 		
 		try
@@ -279,6 +280,18 @@ public class Database
 					ESRBRating esrbRating = new ESRBRating(esrbRatingID, 
 							esrbRatingName, esrbRatingAlias);
 					
+					// User Rating
+					sql = "SELECT AVG(rating.rating) as userRating " + 
+							"FROM rating " + 
+							"WHERE rating.gameID = " + gameID;
+					
+					gameRatingRS = stmt.executeQuery(sql);
+					
+					float userRating = 0f;
+					
+					if(gameRatingRS != null && gameRatingRS.next())
+						userRating = gameRatingRS.getFloat("userRating");
+					
 					// Genres
 					Vector<Genre> genres = new Vector<Genre>();
 					int genreID = 0;
@@ -304,7 +317,8 @@ public class Database
 					// Create the game.
 					game = new Game(gameID, gameTitle, gameDescription, 
 							developer, publisher, genres, gameReleaseDate, 
-							esrbRating, gameBoxArtPath, gameStock, gamePrice);
+							esrbRating, userRating, gameBoxArtPath, 
+							gameStock, gamePrice);
 				}
 			}
 		}
@@ -322,6 +336,13 @@ public class Database
 			{
 				if(gameGenreRS != null)
 					gameGenreRS.close();
+			}
+			catch(Exception e) {}
+			
+			try
+			{
+				if(gameRatingRS != null)
+					gameRatingRS.close();
 			}
 			catch(Exception e) {}
 			
