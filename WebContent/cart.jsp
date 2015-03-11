@@ -34,8 +34,7 @@ catch(Exception e){}
 </jsp:include>
 
   <div class="w-container cart-container">
-    <div class="your-cart-text"><strong>Your Cart</strong>
-    </div>
+  	<h2>Your Cart</h2>
     <ul class="w-list-unstyled list-of-cart-items">
     <%
     try

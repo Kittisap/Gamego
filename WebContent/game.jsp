@@ -51,7 +51,17 @@
 			<strong>Developer:</strong> <%=game.getDeveloper().getName() %><br /><br />
 			<strong>Publisher:</strong> <%=game.getPublisher().getName() %><br /><br />
 			<strong>ESRB Rating:</strong> <%=game.getESRBRating().getName() %><br /><br />
-			<strong>Average User Rating:</strong> <%=game.getUserRating() %>
+			<strong>Average User Rating:</strong> <%=game.getUserRating() %><br /><br />
+			<strong>Your Rating:</strong>
+			
+			<select name="rating">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+			<input type="button" class="pure-button pure-button-primary" value="Rate" />
 		</div>
         <div class="w-form">
           <form id="email-form" method="post" action="./cart.jsp">

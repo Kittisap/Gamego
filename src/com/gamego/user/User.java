@@ -164,7 +164,7 @@ public class User
 	{
 		if(request != null)
 		{
-			User user = (User)request.getSession().getAttribute("user");
+			User user = getSessionUser(request);
 			
 			if(user != null)
 				return true;

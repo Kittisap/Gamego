@@ -6,6 +6,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.sql.*;
 
+import org.apache.commons.io.output.NullWriter;
+
 import com.gamego.user.*;
 import com.gamego.game.*;
 import com.gamego.search.*;
@@ -173,7 +175,7 @@ public class Database
 		try 
 		{
 			stmt = conn.createStatement();
-			query = "SELECT cardId ";
+			query = "SELECT cartId ";
 			query += "FROM cart ";
 			query += "WHERE customerId=" + customerId;
 			
@@ -187,7 +189,7 @@ public class Database
 				query = "INSERT INTO cart ";
 				query += "VALUES(null,"+ customerId +",null) ";
 				stmt.executeUpdate(query);
-				query = "SELECT cardId ";
+				query = "SELECT cartId ";
 				query += "FROM cart ";
 				query += "WHERE customerId=" + customerId;
 				result = stmt.executeQuery(query);
@@ -562,5 +564,55 @@ public class Database
 		}
 		
 		return html;
+	}
+	
+	public String getHistoryHTML(int userID)
+	{
+		String html = "";
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+	    String sql = "SELECT * " + 
+	    		"FROM game " + 
+	    		"INNER JOIN cartgame " + 
+	    		"ON cartgame.gameId=game.gameId " + 
+	    		"INNER JOIN cart " + 
+	    		"ON cart.cartId=cartgame.cartId " + 
+	    		"WHERE customerId = " + userID;
+	    
+	    try
+	    {
+	    	stmt = conn.createStatement();
+	    	rs = stmt.executeQuery(sql);
+	    	
+	    	if(rs != null)
+	    	{
+	    		html += "<div class=\"searchMargin\">";
+	    		html += "<ul class=\"w-list-unstyled list-of-cart-items\">";
+	    		
+	    		while(rs.next())
+	    		{
+	    			int gameID = rs.getInt("gameID");
+	    			Game game = selectGame(gameID);
+	    			Date datePurchased = rs.getDate("transactionDate");
+	    			
+	    			if(game != null)
+	    			{
+		            	html += "<li class=\"w-clearfix\">";
+		            	html += "<img class=\"cart-item-image-example\" src=\"" + game.getBoxArtPath() + "\" />";
+		            	html += "<div class=\"cart-item-name-example\">" + game.getTitle() + "</div>";
+		            	html += "<div class=\"cart-item-price-example\">$" + game.getPrice() + "</div><br />";
+		            	html += "<div>Purchased: " + datePurchased.toString() + "</div>";
+		            	html += "</li>";
+	    			}
+	    		}
+	    		
+	    		html += "</ul>";
+	    		html += "</div>";
+	    	}
+	    }
+	    catch(Exception e) {}
+	    
+	    return html;
 	}
 }

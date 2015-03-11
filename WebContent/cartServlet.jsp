@@ -24,7 +24,7 @@ if (User.isLoggedIn(request))
 	}
 
 	%>
-	<script>window.location.href = "cart.jsp"</script>
+	<script>window.location.href = "checkout.jsp"</script>
 	<%
 }
 else
