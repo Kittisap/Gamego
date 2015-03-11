@@ -602,7 +602,7 @@ public class Database
 		            	html += "<img class=\"cart-item-image-example\" src=\"" + game.getBoxArtPath() + "\" />";
 		            	html += "<div class=\"cart-item-name-example\">" + game.getTitle() + "</div>";
 		            	html += "<div class=\"cart-item-price-example\">$" + game.getPrice() + "</div><br />";
-		            	html += "<div>Purchased: " + datePurchased.toString() + "</div>";
+		            	html += "<div style=\"padding-top:30px\">Purchased: " + datePurchased.toString() + "</div>";
 		            	html += "</li>";
 	    			}
 	    		}
