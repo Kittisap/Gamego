@@ -1,4 +1,4 @@
-package com.gamego.user;
+package com.gamego.cart;
 
 import java.io.IOException;
 
@@ -10,13 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gamego.db.Database;
+import com.gamego.user.User;
 
-@WebServlet("/history")
-public class History extends HttpServlet
+@WebServlet("/checkout")
+public class Checkout extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	
-    public History()
+    public Checkout()
     {
     	super();
     }
@@ -32,24 +33,29 @@ public class History extends HttpServlet
 	{
 		if(User.isLoggedIn(request))
 		{
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
+			Database db = new Database();
+			User user = User.getSessionUser(request);
+			CartBean cart = (CartBean)request.getSession().getAttribute("cart");
+			int transactionID = db.addCart(cart.getCart(), user.getID());
 			
-			if(rd != null)
+			if(transactionID != 0)
 			{
-				Database db = new Database();
-				User user = User.getSessionUser(request);
+				cart.clear();
 				
-				if(db != null && user != null)
-				{
-					request.setAttribute("transactions", db.getUserHistory(user.getID()));
-					
-					rd.include(request, response);
-				}
+				request.setAttribute("transactionID", Transaction.formatTransactionID(transactionID));
+				
+				RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/checkout.jsp");
+				
+				rd.include(request, response);
+			}
+			else
+			{
+				response.sendRedirect("./cart.jsp");
 			}
 		}
 		else
 		{
-			response.sendRedirect("index.jsp");
+			response.sendRedirect("./login");
 		}
 	}
 }

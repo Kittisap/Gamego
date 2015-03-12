@@ -7,7 +7,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>GameGo!<c:if test="${not empty title}">${title}</c:if></title>
+  <title>GameGo!<c:if test="${not empty param.title}"> - ${param.title}</c:if></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Webflow">
   <link rel="stylesheet" type="text/css" href="css/normalize.css">

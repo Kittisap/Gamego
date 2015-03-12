@@ -5,7 +5,7 @@ import java.util.*;
 
 public class CartBean implements Serializable
 {
-	private Vector<String> cart= new Vector<String>();;
+	private Vector<String> cart = new Vector<String>();
 	private String gameId;
 	private String submit;
 	

@@ -1,4 +1,4 @@
-package com.gamego.user;
+package com.gamego.game;
 
 import java.io.IOException;
 
@@ -10,13 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gamego.db.Database;
+import com.gamego.user.User;
 
-@WebServlet("/history")
-public class History extends HttpServlet
+@WebServlet("/login")
+public class Rate extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	
-    public History()
+    public Rate()
     {
     	super();
     }
@@ -30,26 +31,31 @@ public class History extends HttpServlet
 	protected void doPost(HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException
 	{
-		if(User.isLoggedIn(request))
+		if(!User.isLoggedIn(request))
 		{
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
+			String gameIDStr = request.getParameter("gameID");
+			String ratingStr = request.getParameter("rating");
 			
-			if(rd != null)
+			try
 			{
+				int gameID = Integer.parseInt(gameIDStr);
+				int rating = Integer.parseInt(ratingStr);
+				
 				Database db = new Database();
 				User user = User.getSessionUser(request);
 				
 				if(db != null && user != null)
 				{
-					request.setAttribute("transactions", db.getUserHistory(user.getID()));
+					db.addRating(user, gameID, rating);
 					
-					rd.include(request, response);
+					response.sendRedirect("./history");
 				}
 			}
+			catch(Exception e) {}
 		}
 		else
 		{
-			response.sendRedirect("index.jsp");
+			response.sendRedirect("./index.jsp");
 		}
 	}
 }

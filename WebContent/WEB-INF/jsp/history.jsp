@@ -16,11 +16,29 @@
 	    			<li>Items: ${transaction.itemCount}</li>
 	    			<li>Order Total: ${transaction.formattedOrderTotal}</li>
 	    		</ul>
-		    	<c:forEach items="${transaction.items}" var="item">
+		    	<c:forEach items="${transaction.items}" var="transactionItem">
 		    		<div class="transaction-item">
-		    			<a href="./game.jsp?id=${item.ID}">
-		    				<img class="transaction-item-image" src="${item.boxArtPath}" />
+		    			<a href="./game.jsp?id=${transactionItem.item.ID}">
+		    				<img class="transaction-item-image" src="${transactionItem.item.boxArtPath}" />
 						</a>
+						<ul class="transaction-item-details">
+							<li>${transactionItem.item.title}</li>
+							<li>Price: ${transactionItem.item.price}</li>
+							<li>
+								<form method="post" action="./rate">
+									<input type="hidden" name="gameID" value="${transactionItem.item.ID}" />
+									<select class="transaction-item-rating" name="rating">
+										<option value="0"<c:if test="${transactionItem.rating == 0}"> selected</c:if>>Select a rating...</option>
+										<option value="1"<c:if test="${transactionItem.rating == 1}"> selected</c:if>>1</option>
+										<option value="2"<c:if test="${transactionItem.rating == 2}"> selected</c:if>>2</option>
+										<option value="3"<c:if test="${transactionItem.rating == 3}"> selected</c:if>>3</option>
+										<option value="4"<c:if test="${transactionItem.rating == 4}"> selected</c:if>>4</option>
+										<option value="5"<c:if test="${transactionItem.rating == 5}"> selected</c:if>>5</option>
+									</select>
+									<button class="pure-button pure-button-primary" type="submit">Rate!</button>
+								</form>
+							</li>
+						</ul>
 		    		</div>
 		    	</c:forEach>
 			</div>

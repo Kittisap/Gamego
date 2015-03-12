@@ -618,7 +618,6 @@ p {
 
 .transaction-history
 {
-	padding-bottom: 15px;
 	margin-left: 15px;
 }
 
@@ -643,11 +642,33 @@ p {
 
 .transaction-item
 {
-	float: left;
+	padding-bottom: 10px;
+	clear: both;
+}
+
+.transaction-item:after
+{
+	content: " ";
+	display: block; 
+	height: 0; 
+	clear: both;
 }
 
 .transaction-item-image
 {
 	width: 110px;
 	height: 150px;
+	float: left;
+}
+
+.transaction-item-details
+{
+	list-style-type: none;
+	padding-left: 5px;
+	float: left;
+}
+
+.transaction-item-rating
+{
+	height: 30px;
 }

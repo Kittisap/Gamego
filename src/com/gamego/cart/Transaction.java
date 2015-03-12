@@ -3,19 +3,17 @@ package com.gamego.cart;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import com.gamego.game.*;
-
 public class Transaction
 {
 	private int m_userID;
-	private Vector<Game> m_items;
+	private Vector<TransactionItem> m_items;
 	private Date m_transactionDate;
 	private float m_orderTotal;
 	
 	public Transaction()
 	{
 		m_userID = 0;
-		m_items = new Vector<Game>();
+		m_items = new Vector<TransactionItem>();
 		m_transactionDate = new Date();
 		m_orderTotal = 0f;
 	}
@@ -43,18 +41,18 @@ public class Transaction
 		return m_userID;
 	}
 	
-	public boolean addItem(Game game)
+	public boolean addItem(TransactionItem item)
 	{
-		if(game == null)
+		if(item == null)
 			return false;
 		
-		m_items.add(game);
-		m_orderTotal += game.getPrice();
+		m_items.add(item);
+		m_orderTotal += item.getItem().getPrice();
 		
 		return true;
 	}
 	
-	public Vector<Game> getItems()
+	public Vector<TransactionItem> getItems()
 	{
 		return m_items;
 	}
@@ -92,5 +90,12 @@ public class Transaction
 		DecimalFormat df = new DecimalFormat("0.00");
 		
 		return "$" + df.format(m_orderTotal);
+	}
+	
+	public static String formatTransactionID(int transactionID)
+	{
+		DecimalFormat df = new DecimalFormat("00000000000");
+		
+		return "#" + df.format(transactionID);
 	}
 }

@@ -152,12 +152,16 @@ public class Database
 		return isVerified;
 	}
 	
-	public void addCart(String[] gameIds, int customerId)
+	public int addCart(String[] gameIds, int customerId)
 	{
 		Statement stmt = null;
 		ResultSet result = null;
 		String query;
 		int cartId = 0;
+		
+		if(gameIds.length == 0)
+			return cartId;
+		
 		try 
 		{
 			stmt = conn.createStatement();
@@ -184,11 +188,9 @@ public class Database
 				stmt.executeUpdate(query);
 			}
 		} 
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
+		catch (SQLException e) {}
 		
+		return cartId;
 	}
 	
 	public Game selectGame(int gameID)
@@ -553,7 +555,10 @@ public class Database
 	    		"ON cartgame.gameId = game.gameID " + 
 	    		"INNER JOIN cart " + 
 	    		"ON cart.cartId = cartgame.cartId " + 
-	    		"WHERE customerId = " + userID + " " + 
+	    		"LEFT JOIN rating " + 
+	    		"ON game.gameID = rating.gameId AND " + 
+	    		"cart.customerId = rating.customerId " + 
+	    		"WHERE cart.customerId = " + userID + " " + 
 	    		"ORDER BY cart.transactionDate DESC";
 	    
 	    try
@@ -582,8 +587,10 @@ public class Database
 
 	    			int gameID = rs.getInt("gameID");
 	    			Game game = selectGame(gameID);
+	    			int rating = rs.getInt("rating");
+	    			TransactionItem item = new TransactionItem(game, rating);
 	    			
-	    			transaction.addItem(game);
+	    			transaction.addItem(item);
 	    		}
 	    		
 	    		history.add(transaction);
@@ -592,5 +599,30 @@ public class Database
 	    catch(Exception e) {}
 	    
 	    return history;
+	}
+	
+	public boolean addRating(User user, int gameID, int rating)
+	{
+		if(user == null || rating < 1 || rating > 5)
+			return false;
+		
+		Statement stmt = null;
+		boolean isRated = false;
+		
+		String sql = "INSERT INTO rating " + 
+				"(ratingId, gameId, customerId, rating) " + 
+				"VALUES (NULL, " + gameID + ", " + 
+				user.getID() + ", " + rating + ")";
+		
+		try
+		{
+			stmt = conn.createStatement();
+			int affectedRows = stmt.executeUpdate(sql);
+			
+			isRated = (affectedRows == 0 ? false : true);
+		}
+		catch(Exception e) {}
+		
+		return isRated;
 	}
 }
