@@ -47,6 +47,7 @@ public class Register extends HttpServlet {
 			String passwordConfirm = request.getParameter("passwordConfirm");
 			
 			Database db = new Database();
+			RequestDispatcher rd = null;
 			
 			try
 			{
@@ -60,10 +61,16 @@ public class Register extends HttpServlet {
 				request.setAttribute("email", email);
 				request.setAttribute("error", e.getMessage());
 				
-				RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
-				
+				rd = request.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
 				rd.include(request, response);
+				
+				return;
 			}
+			
+			request.setAttribute("username", username);
+			
+			rd = request.getRequestDispatcher("/WEB-INF/jsp/registerSuccess.jsp");
+			rd.include(request, response);
 		}
 		else
 		{

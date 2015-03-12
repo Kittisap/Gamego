@@ -1,21 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="com.gamego.user.*" %>
-
-<%
-	String pageTitle = request.getParameter("title");
-
-	if(pageTitle == null)
-		pageTitle = "";
-	else
-		pageTitle = "- " + pageTitle;
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
   <meta charset="utf-8">
-  <title>GameGo! <%=pageTitle %></title>
+  <title>GameGo!<c:if test="${not empty title}">${title}</c:if></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Webflow">
   <link rel="stylesheet" type="text/css" href="css/normalize.css">
@@ -52,7 +44,7 @@
       			User user = User.getSessionUser(request);
       	%>
       	<a class="w-nav-link nav-link-signup" href="#"><%=user.getUsername() %></a>
-      	<a class="w-nav-link nav-link-signup" href="./history.jsp">History</a>
+      	<a class="w-nav-link nav-link-signup" href="./history">History</a>
       	<a class="w-nav-link nav-link-signup" href="./logout">Logout</a>
       	<%
       		}

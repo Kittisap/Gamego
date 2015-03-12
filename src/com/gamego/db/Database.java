@@ -92,6 +92,7 @@ public class Database
 		
 		Statement stmt = null;
 		ResultSet rs = null;
+		boolean isVerified = false;
 		
 		try
 		{
@@ -113,7 +114,6 @@ public class Database
 					String email = rs.getString("email");
 					Date dateRegisterd = rs.getDate("dateRegistered");
 					boolean isAdmin = rs.getInt("admin") == 1 ? true : false;
-					boolean isVerified = true;
 					
 					if(user.getPassword().equals(password))
 					{	
@@ -123,7 +123,8 @@ public class Database
 						user.setEmail(email);
 						user.setDateRegistered(dateRegisterd);
 						user.setAdmin(isAdmin);
-						user.setVerified(isVerified);
+						
+						isVerified = true;
 					}
 				}
 			}
@@ -148,7 +149,7 @@ public class Database
 			close();
 		}
 		
-		return user.isVerified();
+		return isVerified;
 	}
 	
 	public void addCart(String[] gameIds, int customerId)

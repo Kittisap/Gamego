@@ -8,15 +8,19 @@
 
   <div class="w-container history-container">
     <h2>Your History</h2>
-	<table>
+    <div class="history-transaction">
 	    <c:forEach items="${transactions}" var="transaction">
-	        <tr>
-	            <td>${transaction.game.boxartpath}</td>
-	            <td>${transaction.game.formattedPrice}</td>
-	            <td>${transaction.transactionDate}</td>
-	        </tr>
+	    	<div class="history-item">
+	    		<a href="./game.jsp?id=${transaction.game.ID}">
+	    			<img class="history-image" src="${transaction.game.boxArtPath}" />
+	    		</a>
+	    		<ul class="history-details">
+	    			<li><a href="./game.jsp?id=${transaction.game.ID}">${transaction.game.title}</a></li>
+	    			<li>Price: ${transaction.game.formattedPrice}</li>
+	    		</ul>
+	    	</div>
 	    </c:forEach>
-	</table>
+	</div>
   </div>
 
 <jsp:include page="footer.jsp" />

@@ -12,7 +12,6 @@ public class User
 	private String m_password;
 	private Date m_dateRegistered;
 	private boolean m_isAdmin;
-	private boolean m_isVerified;
 	
 	public User()
 	{
@@ -22,7 +21,6 @@ public class User
 		m_email = null;
 		m_dateRegistered = null;
 		m_isAdmin = false;
-		m_isVerified = false;
 	}
 	
 	// Used for login.
@@ -45,6 +43,8 @@ public class User
 		
 		if(password == null || passwordConfirm == null || !password.equals(passwordConfirm))
 			throw new Exception("Passwords don't match.");
+		
+		setPassword(password);
 	}
 	
 	public boolean setID(int id)
@@ -130,16 +130,6 @@ public class User
 	public boolean isAdmin()
 	{
 		return m_isAdmin;
-	}
-	
-	public void setVerified(boolean isVerified)
-	{
-		m_isVerified = isVerified;
-	}
-	
-	public boolean isVerified()
-	{
-		return m_isVerified;
 	}
 	
 	public static String hash(String str)
