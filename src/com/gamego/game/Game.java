@@ -1,6 +1,7 @@
 package com.gamego.game;
 
 import java.util.*;
+import java.text.*;
 
 public class Game
 {
@@ -217,12 +218,17 @@ public class Game
 		return true;
 	}
 	
-	public String getUserRating()
+	public float getUserRating()
+	{
+		return m_userRating;
+	}
+	
+	public String getFormattedUserRating()
 	{
 		if(m_userRating < 1f)
 			return "N/A";
 		
-		return String.format("%.1f", m_userRating);
+		return String.format("%.1f (5.0)", m_userRating);
 	}
 	
 	public boolean setBoxArtPath(String boxArtPath)
@@ -255,6 +261,11 @@ public class Game
 		return m_stock;
 	}
 	
+	public boolean isInStock()
+	{
+		return m_stock > 0;
+	}
+	
 	public boolean setPrice(float price)
 	{
 		if(price < 0.0f)
@@ -268,5 +279,12 @@ public class Game
 	public float getPrice()
 	{
 		return m_price;
+	}
+	
+	public String getFormattedPrice()
+	{
+		DecimalFormat df = new DecimalFormat("0.00");
+		
+		return "$" + df.format(m_price);
 	}
 }

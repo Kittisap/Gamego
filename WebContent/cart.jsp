@@ -29,7 +29,7 @@ try
 catch(Exception e){}
 %>
 
-<jsp:include page="header.jsp" >
+<jsp:include page="/WEB-INF/jsp/header.jsp" >
 	<jsp:param name="title" value="Cart" />
 </jsp:include>
 
@@ -46,13 +46,13 @@ catch(Exception e){}
         	%>
         	<li class="w-clearfix"><img class="cart-item-image-example" src="<%=gameList[i].getBoxArtPath() %>">
         	<div class="cart-item-name-example"><%=gameList[i].getTitle() %></div>
-        	<div class="cart-item-price-example">$<%=gameList[i].getPrice() %></div>
+        	<div class="cart-item-price-example"><%=gameList[i].getFormattedPrice() %></div>
         	</li>
         	<%
         }
     }
     catch(Exception e) {}
-    DecimalFormat df = new DecimalFormat("#.00");
+    DecimalFormat df = new DecimalFormat("0.00");
     String priceString = df.format(totalPrice);
     
     %>
@@ -61,11 +61,11 @@ catch(Exception e){}
     	</li>
     </ul>
     <div class="w-form">
-      <form class="w-clearfix" id="email-form-2" name="email-form-2" data-name="Email Form 2" type=POST action=cartServlet.jsp>
-        <input class="w-button cart-checkout-button" type="submit" value="Purchase">
+      <form class="w-clearfix" id="email-form-2" name="email-form-2" data-name="Email Form 2" method="post" action="cartServlet.jsp">
+        <input class="w-button cart-checkout-button" type="submit" value="Purchase" />
         <input type="hidden" name="amount" value="<%=priceString %>" />
       </form>
     </div>
   </div>
 
-<jsp:include page="footer.jsp" />
+<jsp:include page="/WEB-INF/jsp/footer.jsp" />

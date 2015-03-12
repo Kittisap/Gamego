@@ -19,7 +19,7 @@ String query;
 ResultSet gameSet;
 %>
 
-<jsp:include page="header.jsp" />
+<jsp:include page="/WEB-INF/jsp/header.jsp" />
 
   <div class="w-container search-container">
     <div class="w-form">
@@ -117,4 +117,4 @@ ResultSet gameSet;
     </ol>
   </div>
 
-<jsp:include page="footer.jsp" />
+<jsp:include page="/WEB-INF/jsp/footer.jsp" />

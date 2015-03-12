@@ -17,7 +17,7 @@ Connection conn = connPool.getConnection();
 Statement stmt = conn.createStatement();
 %>
 
-<jsp:include page="header.jsp" >
+<jsp:include page="/WEB-INF/jsp/header.jsp" >
 	<jsp:param name="title" value="Bestsellers by Genre" />
 </jsp:include>
 
@@ -99,4 +99,4 @@ Statement stmt = conn.createStatement();
     <div class="w-row"></div>
   </div>
 
-<jsp:include page="footer.jsp" />
+<jsp:include page="/WEB-INF/jsp/footer.jsp" />

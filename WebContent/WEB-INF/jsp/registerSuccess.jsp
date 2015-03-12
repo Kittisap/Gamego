@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
-<jsp:include page="header.jsp" >
+<jsp:include page="/WEB-INF/jsp/header.jsp" >
 	<jsp:param name="title" value="Registration Successful" />
 </jsp:include>
 
@@ -10,4 +10,4 @@
     <div class="searchMargin">Welcome to GameGo! You may login <a href="./login">here</a>.</div>
 </div>
 
-<jsp:include page="footer.jsp" />
+<jsp:include page="/WEB-INF/jsp/footer.jsp" />

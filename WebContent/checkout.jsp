@@ -2,7 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*" %>
 
-<jsp:include page="header.jsp" >
+<jsp:include page="/WEB-INF/jsp/header.jsp" >
 	<jsp:param name="title" value="Thank you!" />
 </jsp:include>
 
@@ -21,4 +21,4 @@
     </div><a class="history-link-text" href="./history.jsp">Your History</a>
   </div>
   
-<jsp:include page="footer.jsp" />
+<jsp:include page="/WEB-INF/jsp/footer.jsp" />

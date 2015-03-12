@@ -32,7 +32,7 @@
 	}
 %>
 
-<jsp:include page="header.jsp" >
+<jsp:include page="/WEB-INF/jsp/header.jsp" >
 	<jsp:param name="title" value="<%=game.getTitle() %>" />
 </jsp:include>
 
@@ -46,31 +46,39 @@
       </div>
       <div class="w-col w-col-4 game-info-col-2">
         <div class="game-info">
-			<strong>Genre:</strong> <%=game.getGenreString() %><br /><br />
-			<strong>Release Date</strong>: <%=game.getReleaseDate() %><br /><br />
-			<strong>Developer:</strong> <%=game.getDeveloper().getName() %><br /><br />
-			<strong>Publisher:</strong> <%=game.getPublisher().getName() %><br /><br />
-			<strong>ESRB Rating:</strong> <%=game.getESRBRating().getName() %><br /><br />
-			<strong>Average User Rating:</strong> <%=game.getUserRating() %><br /><br />
-			<strong>Your Rating:</strong>
+			<strong>Genre:</strong> <%=game.getGenreString() %><br />
+			<strong>Release Date</strong>: <%=game.getReleaseDate() %><br />
+			<strong>Developer:</strong> <%=game.getDeveloper().getName() %><br />
+			<strong>Publisher:</strong> <%=game.getPublisher().getName() %><br />
+			<strong>ESRB Rating:</strong> <%=game.getESRBRating().getName() %><br />
+			<strong>Average User Rating:</strong> <%=game.getFormattedUserRating() %><br /><br />
+			<strong>Price:</strong> <%=game.getFormattedPrice() %>
 			
-			<select name="rating">
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-			</select>
-			<input type="button" class="pure-button pure-button-primary" value="Rate" />
+			<%
+				boolean isInStock = game.isInStock();
+				if(!isInStock)
+				{
+			%>
+			<br /><br /><strong>OUT OF STOCK</strong>
+			<%
+				}
+			%>
 		</div>
-        <div class="w-form">
-          <form id="email-form" method="post" action="./cart.jsp">
-            <input class="pure-button pure-button-primary add-to-cart" type="submit" value="Add to Cart" />
-            <input type="hidden" name="gameId" value="<%=game.getID() %>" />
-          </form>
-        </div>
+		<%
+			if(isInStock)
+			{
+		%>
+	        <div class="w-form">
+	          <form method="post" action="./cart.jsp">
+	            <input class="pure-button pure-button-primary add-to-cart" type="submit" value="Add to Cart" />
+	            <input type="hidden" name="gameId" value="<%=game.getID() %>" />
+	          </form>
+	        </div>
+		<%
+			}
+		%>
       </div>
     </div>
   </div>
 
-<jsp:include page="footer.jsp" />
+<jsp:include page="/WEB-INF/jsp/footer.jsp" />

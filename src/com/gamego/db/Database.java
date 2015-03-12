@@ -2,14 +2,10 @@ package com.gamego.db;
 
 import java.util.*;
 import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.sql.*;
-
-import org.apache.commons.io.output.NullWriter;
-
 import com.gamego.user.*;
 import com.gamego.game.*;
+import com.gamego.cart.*;
 import com.gamego.search.*;
 
 public class Database
@@ -41,63 +37,52 @@ public class Database
 		catch(Exception e) {}
 	}
 	
-	public Boolean registerUser(User user)
+	public void registerUser(User user) throws Exception
 	{
-		if(conn == null || user == null || !user.isVerified())
-			return false;
-		
 		Statement stmt = null;
 		ResultSet rs = null;
-		Boolean isRegistered = false;
 		
-		try
+		String sql = "SELECT * " + 
+				"FROM member " + 
+				"WHERE username = '" + user.getUsername() + "' " + 
+				"OR email = '" + user.getEmail() + "'";
+		
+		stmt = conn.createStatement();
+		rs = stmt.executeQuery(sql);
+		
+		while(rs.next())
 		{
-			stmt = conn.createStatement();
+			String username = rs.getString("username");
+			String email = rs.getString("email");
 			
-			if(stmt != null)
+			if(username.equals(user.getUsername()))
 			{
-				String sql = "SELECT username " + 
-						"FROM member " + 
-						"WHERE username = '" + user.getUsername() + "'";
-
-				rs = stmt.executeQuery(sql);
+				rs.close();
+				stmt.close();
+				this.close();
 				
-				if(rs != null && !rs.next())
-				{
-					sql = "INSERT INTO member " + 
-							"(customerId, username, password, email) " + 
-							"VALUES (NULL, '" + 
-							user.getUsername() + "', '" + 
-							user.getPassword() + "', '" + 
-							user.getEmail() + "')";
-
-					int rowsAffected = stmt.executeUpdate(sql);
-					
-					isRegistered = (rowsAffected > 0 ? true : false);
-				}
+				throw new Exception("Username is taken.");
 			}
-		}
-		catch(Exception e) {}
-		finally
-		{
-			try
-			{
-				if(rs != null)
-					rs.close();
-			}
-			catch(Exception e) {}
 			
-			try
+			if(email.equals(user.getEmail()))
 			{
-				if(stmt != null)
-					stmt.close();
+				rs.close();
+				stmt.close();
+				this.close();
+				
+				throw new Exception("Email is already being used.");
 			}
-			catch(Exception e) {}
-			
-			close();
 		}
 		
-		return isRegistered;
+		sql = "INSERT INTO member " + 
+				"(customerId, username, password, email) " + 
+				"VALUES (NULL, '" + 
+				user.getUsername() + "', '" + 
+				user.getPassword() + "', '" + 
+				user.getEmail() + "')";
+		
+		if(stmt.executeUpdate(sql) == 0)
+			throw new Exception("Unknown error occurred.");
 	}
 	
 	public boolean verifyUser(User user)
@@ -566,11 +551,11 @@ public class Database
 		return html;
 	}
 	
-	public String getHistoryHTML(int userID)
+	public Vector<Transaction> getUserHistory(int userID)
 	{
-		String html = "";
 		Statement stmt = null;
 		ResultSet rs = null;
+		Vector<Transaction> history = new Vector<Transaction>();
 		
 	    String sql = "SELECT * " + 
 	    		"FROM game " + 
@@ -586,33 +571,20 @@ public class Database
 	    	rs = stmt.executeQuery(sql);
 	    	
 	    	if(rs != null)
-	    	{
-	    		html += "<div class=\"searchMargin\">";
-	    		html += "<ul class=\"w-list-unstyled list-of-cart-items\">";
-	    		
+	    	{	
 	    		while(rs.next())
 	    		{
 	    			int gameID = rs.getInt("gameID");
 	    			Game game = selectGame(gameID);
 	    			Date datePurchased = rs.getDate("transactionDate");
+	    			Transaction transaction = new Transaction(userID, game, datePurchased);
 	    			
-	    			if(game != null)
-	    			{
-		            	html += "<li class=\"w-clearfix\">";
-		            	html += "<a href=\"./game.jsp?id=" + game.getID() + "\"><img class=\"cart-item-image-example\" src=\"" + game.getBoxArtPath() + "\" /></a>";
-		            	html += "<div class=\"cart-item-name-example\"><a href=\"./game.jsp?id=" + game.getID() + "\">" + game.getTitle() + "</a></div>";
-		            	html += "<div class=\"cart-item-price-example\">$" + game.getPrice() + "</div><br />";
-		            	html += "<div style=\"padding-top:30px\">Purchased: " + datePurchased.toString() + "</div>";
-		            	html += "</li>";
-	    			}
+	    			history.add(transaction);
 	    		}
-	    		
-	    		html += "</ul>";
-	    		html += "</div>";
 	    	}
 	    }
 	    catch(Exception e) {}
 	    
-	    return html;
+	    return history;
 	}
 }

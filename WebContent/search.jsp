@@ -29,7 +29,7 @@
 	}
 %>
 
-<jsp:include page="header.jsp" >
+<jsp:include page="/WEB-INF/jsp/header.jsp" >
 	<jsp:param name="title" value="<%=search.getQuery() %>" />
 </jsp:include>
 
@@ -52,4 +52,4 @@
     <%=search.getPageLinksHTML() %>
   </div>
 
-<jsp:include page="footer.jsp" />
+<jsp:include page="/WEB-INF/jsp/footer.jsp" />

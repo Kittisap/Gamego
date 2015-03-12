@@ -51,7 +51,8 @@
       		{
       			User user = User.getSessionUser(request);
       	%>
-      	<a class="w-nav-link nav-link-signup" href="./history.jsp"><%=user.getUsername() %></a>
+      	<a class="w-nav-link nav-link-signup" href="#"><%=user.getUsername() %></a>
+      	<a class="w-nav-link nav-link-signup" href="./history.jsp">History</a>
       	<a class="w-nav-link nav-link-signup" href="./logout">Logout</a>
       	<%
       		}

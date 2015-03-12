@@ -24,29 +24,23 @@ public class Login extends HttpServlet
 	protected void doGet(HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException
 	{
-		if(User.isLoggedIn(request))
-			response.sendRedirect("./index.jsp");
-		
-		if(request != null && response != null)
+		if(!User.isLoggedIn(request))
 		{
-			RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
 			
 			if(rd != null)
-			{
-				response.setContentType("text/html");
-				
 				rd.include(request, response);
-			}
+		}
+		else
+		{
+			response.sendRedirect("./index.jsp");
 		}
 	}
 
 	protected void doPost(HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException
 	{
-		if(User.isLoggedIn(request))
-			response.sendRedirect("./index.jsp");
-		
-		if(request != null && response != null)
+		if(!User.isLoggedIn(request))
 		{
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
@@ -61,8 +55,20 @@ public class Login extends HttpServlet
 			}
 			else
 			{
-				response.sendRedirect("./login?error");
+				RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
+				
+				if(rd != null)
+				{
+					request.setAttribute("error", "Invalid username and password combination. Please try again.");
+					request.setAttribute("username", username);
+					
+					rd.include(request, response);
+				}
 			}
+		}
+		else
+		{
+			response.sendRedirect("./index.jsp");
 		}
 	}
 }

@@ -1,19 +1,15 @@
 package com.gamego.user;
 
-import java.io.IOException;
 import java.util.Date;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.codec.digest.*;
 
 public class User
 {
 	private int m_id;
 	private String m_username;
-	private String m_password;
 	private String m_email;
+	private String m_password;
 	private Date m_dateRegistered;
 	private boolean m_isAdmin;
 	private boolean m_isVerified;
@@ -39,22 +35,16 @@ public class User
 	}
 	
 	// Used for registration.
-	public User(String username, 
-			String password, 
-			String passwordConfirm, 
-			String email)
+	public User(String username, String email, String password, 
+			String passwordConfirm) throws Exception
 	{
 		this();
 		
 		setUsername(username);
 		setEmail(email);
 		
-		if(password != null && passwordConfirm != null && 
-				password.equals(passwordConfirm))
-		{
-			setPassword(password);
-			setVerified(true);
-		}
+		if(password == null || passwordConfirm == null || !password.equals(passwordConfirm))
+			throw new Exception("Passwords don't match.");
 	}
 	
 	public boolean setID(int id)
@@ -87,21 +77,6 @@ public class User
 		return m_username;
 	}
 	
-	public boolean setPassword(String password)
-	{
-		if(password == null)
-			return false;
-		
-		m_password = hash(password);
-		
-		return true;
-	}
-	
-	public String getPassword()
-	{
-		return m_password;
-	}
-	
 	public boolean setEmail(String email)
 	{
 		if(email == null)
@@ -115,6 +90,21 @@ public class User
 	public String getEmail()
 	{
 		return m_email;
+	}
+	
+	public boolean setPassword(String password)
+	{
+		if(password == null)
+			return false;
+		
+		m_password = hash(password);
+		
+		return true;
+	}
+	
+	public String getPassword()
+	{
+		return m_password;
 	}
 	
 	public boolean setDateRegistered(Date dateRegistered)
