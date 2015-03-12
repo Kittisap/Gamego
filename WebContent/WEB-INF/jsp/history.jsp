@@ -6,21 +6,26 @@
 	<jsp:param name="title" value="Your History" />
 </jsp:include>
 
-  <div class="w-container history-container">
-    <h2>Your History</h2>
-    <div class="history-transaction">
-	    <c:forEach items="${transactions}" var="transaction">
-	    	<div class="history-item">
-	    		<a href="./game.jsp?id=${transaction.game.ID}">
-	    			<img class="history-image" src="${transaction.game.boxArtPath}" />
-	    		</a>
-	    		<ul class="history-details">
-	    			<li><a href="./game.jsp?id=${transaction.game.ID}">${transaction.game.title}</a></li>
-	    			<li>Price: ${transaction.game.formattedPrice}</li>
+<div class="w-container history-container">
+	<h2>Your History</h2>
+	<div class="transaction-history">
+		<c:forEach items="${transactions}" var="transaction">
+			<div class="transaction">
+				<h3>Transaction for ${transaction.transactionDate}</h3>
+	    		<ul class="transaction-details">
+	    			<li>Items: ${transaction.itemCount}</li>
+	    			<li>Order Total: ${transaction.formattedOrderTotal}</li>
 	    		</ul>
-	    	</div>
-	    </c:forEach>
+		    	<c:forEach items="${transaction.items}" var="item">
+		    		<div class="transaction-item">
+		    			<a href="./game.jsp?id=${item.ID}">
+		    				<img class="transaction-item-image" src="${item.boxArtPath}" />
+						</a>
+		    		</div>
+		    	</c:forEach>
+			</div>
+		</c:forEach>
 	</div>
-  </div>
+</div>
 
 <jsp:include page="footer.jsp" />

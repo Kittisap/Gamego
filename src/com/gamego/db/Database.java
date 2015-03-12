@@ -550,10 +550,11 @@ public class Database
 	    String sql = "SELECT * " + 
 	    		"FROM game " + 
 	    		"INNER JOIN cartgame " + 
-	    		"ON cartgame.gameId=game.gameId " + 
+	    		"ON cartgame.gameId = game.gameID " + 
 	    		"INNER JOIN cart " + 
-	    		"ON cart.cartId=cartgame.cartId " + 
-	    		"WHERE customerId = " + userID;
+	    		"ON cart.cartId = cartgame.cartId " + 
+	    		"WHERE customerId = " + userID + " " + 
+	    		"ORDER BY cart.transactionDate DESC";
 	    
 	    try
 	    {
@@ -561,16 +562,31 @@ public class Database
 	    	rs = stmt.executeQuery(sql);
 	    	
 	    	if(rs != null)
-	    	{	
+	    	{
+	    		int currentCartID = 0;
+	    		Transaction transaction = null;
+
 	    		while(rs.next())
 	    		{
+	    			int cartID = rs.getInt("cartId");
+	    			Date transactionDate = rs.getDate("transactionDate");
+	    			
+	    			if(cartID != currentCartID)
+	    			{
+	    				if(currentCartID != 0)
+	    					history.add(transaction);
+
+	    				transaction = new Transaction(userID, transactionDate);
+	    				currentCartID = cartID;
+	    			}
+
 	    			int gameID = rs.getInt("gameID");
 	    			Game game = selectGame(gameID);
-	    			Date datePurchased = rs.getDate("transactionDate");
-	    			Transaction transaction = new Transaction(userID, game, datePurchased);
 	    			
-	    			history.add(transaction);
+	    			transaction.addItem(game);
 	    		}
+	    		
+	    		history.add(transaction);
 	    	}
 	    }
 	    catch(Exception e) {}

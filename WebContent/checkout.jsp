@@ -18,7 +18,7 @@
       %>
       <br>
       <br>Remember to <strong>rate </strong>the game in your history <strong>once you have played it!</strong>
-    </div><a class="history-link-text" href="./history.jsp">Your History</a>
+    </div><a class="history-link-text" href="./history">Your History</a>
   </div>
   
 <jsp:include page="/WEB-INF/jsp/footer.jsp" />
