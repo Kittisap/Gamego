@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.gamego.db.Database;
 import com.gamego.user.User;
 
-@WebServlet("/login")
+@WebServlet("/rate")
 public class Rate extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
@@ -31,7 +31,7 @@ public class Rate extends HttpServlet
 	protected void doPost(HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException
 	{
-		if(!User.isLoggedIn(request))
+		if(User.isLoggedIn(request))
 		{
 			String gameIDStr = request.getParameter("gameID");
 			String ratingStr = request.getParameter("rating");
@@ -43,12 +43,15 @@ public class Rate extends HttpServlet
 				
 				Database db = new Database();
 				User user = User.getSessionUser(request);
+				Game game = db.selectGame(gameID);
 				
-				if(db != null && user != null)
+				if(db.addRating(user, game, rating))
 				{
-					db.addRating(user, gameID, rating);
+					request.setAttribute("gameTitle", game.getTitle());
 					
-					response.sendRedirect("./history");
+					RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/ratingSuccess.jsp");
+					
+					rd.include(request, response);
 				}
 			}
 			catch(Exception e) {}

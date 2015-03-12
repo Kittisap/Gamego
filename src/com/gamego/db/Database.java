@@ -556,8 +556,8 @@ public class Database
 	    		"INNER JOIN cart " + 
 	    		"ON cart.cartId = cartgame.cartId " + 
 	    		"LEFT JOIN rating " + 
-	    		"ON game.gameID = rating.gameId AND " + 
-	    		"cart.customerId = rating.customerId " + 
+	    		"ON game.gameID = rating.gameId " + 
+	    		"AND cart.customerId = rating.customerId " + 
 	    		"WHERE cart.customerId = " + userID + " " + 
 	    		"ORDER BY cart.transactionDate DESC";
 	    
@@ -601,25 +601,51 @@ public class Database
 	    return history;
 	}
 	
-	public boolean addRating(User user, int gameID, int rating)
+	public boolean addRating(User user, Game game, int rating)
 	{
 		if(user == null || rating < 1 || rating > 5)
 			return false;
 		
 		Statement stmt = null;
+		ResultSet rs = null;
 		boolean isRated = false;
-		
-		String sql = "INSERT INTO rating " + 
-				"(ratingId, gameId, customerId, rating) " + 
-				"VALUES (NULL, " + gameID + ", " + 
-				user.getID() + ", " + rating + ")";
 		
 		try
 		{
 			stmt = conn.createStatement();
-			int affectedRows = stmt.executeUpdate(sql);
 			
-			isRated = (affectedRows == 0 ? false : true);
+			String sql = "SELECT COUNT(*) as numPurchases, " + 
+					"COUNT(rating) as numRatings " + 
+					"FROM game " + 
+					"INNER JOIN cartgame " + 
+					"ON cartgame.gameId = game.gameID " + 
+					"INNER JOIN cart " + 
+					"ON cart.cartId = cartgame.cartId " + 
+					"LEFT JOIN rating " + 
+					"ON game.gameID = rating.gameId " + 
+					"AND cart.customerId = rating.customerId " + 
+					"WHERE cart.customerId = " + user.getID() + " " + 
+					"AND game.gameID = " + game.getID();
+			
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next())
+			{
+				int numPurchases = rs.getInt("numPurchases");
+				int numRatings = rs.getInt("numRatings");
+				
+				if(numPurchases > 0 && numRatings == 0)
+				{
+					sql = "INSERT INTO rating " + 
+							"(ratingId, gameId, customerId, rating) " + 
+							"VALUES (NULL, " + game.getID() + ", " + 
+							user.getID() + ", " + rating + ")";
+
+					int affectedRows = stmt.executeUpdate(sql);
+					
+					isRated = (affectedRows == 0 ? false : true);
+				}
+			}
 		}
 		catch(Exception e) {}
 		

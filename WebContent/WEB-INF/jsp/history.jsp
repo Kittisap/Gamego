@@ -23,20 +23,27 @@
 						</a>
 						<ul class="transaction-item-details">
 							<li>${transactionItem.item.title}</li>
-							<li>Price: ${transactionItem.item.price}</li>
+							<li>Price: ${transactionItem.item.formattedPrice}</li>
 							<li>
-								<form method="post" action="./rate">
-									<input type="hidden" name="gameID" value="${transactionItem.item.ID}" />
-									<select class="transaction-item-rating" name="rating">
-										<option value="0"<c:if test="${transactionItem.rating == 0}"> selected</c:if>>Select a rating...</option>
-										<option value="1"<c:if test="${transactionItem.rating == 1}"> selected</c:if>>1</option>
-										<option value="2"<c:if test="${transactionItem.rating == 2}"> selected</c:if>>2</option>
-										<option value="3"<c:if test="${transactionItem.rating == 3}"> selected</c:if>>3</option>
-										<option value="4"<c:if test="${transactionItem.rating == 4}"> selected</c:if>>4</option>
-										<option value="5"<c:if test="${transactionItem.rating == 5}"> selected</c:if>>5</option>
-									</select>
-									<button class="pure-button pure-button-primary" type="submit">Rate!</button>
-								</form>
+								<c:choose>
+									<c:when test="${transactionItem.rating == 0}">
+										<form method="post" action="./rate">
+											<input type="hidden" name="gameID" value="${transactionItem.item.ID}" />
+											<select class="transaction-item-rating" name="rating">
+												<option value="0">Select a rating...</option>
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+											<button class="pure-button pure-button-primary" type="submit">Rate!</button>
+										</form>
+									</c:when>
+									<c:otherwise>
+										Your Rating: ${transactionItem.rating}
+									</c:otherwise>
+								</c:choose>
 							</li>
 						</ul>
 		    		</div>

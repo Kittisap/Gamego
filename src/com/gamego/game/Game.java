@@ -228,7 +228,7 @@ public class Game
 		if(m_userRating < 1f)
 			return "N/A";
 		
-		return String.format("%.1f (5.0)", m_userRating);
+		return String.format("%.1f / 5.0", m_userRating);
 	}
 	
 	public boolean setBoxArtPath(String boxArtPath)
