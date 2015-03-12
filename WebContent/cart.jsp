@@ -14,6 +14,7 @@
 Database db = new Database();
 String[] idList = new String[0];
 Game[] gameList = new Game[0];
+Game gameToAdd;
 float totalPrice = 0;
 
 try

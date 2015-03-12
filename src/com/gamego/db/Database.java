@@ -161,37 +161,26 @@ public class Database
 		try 
 		{
 			stmt = conn.createStatement();
+			query = "INSERT INTO cart ";
+			query += "VALUES(null,"+ customerId +",null) ";
+			stmt.executeUpdate(query);
 			query = "SELECT cartId ";
 			query += "FROM cart ";
-			query += "WHERE customerId=" + customerId;
-			
+			query += "WHERE customerId=" + customerId + " ";
+			query += "ORDER BY transactionDate desc";
 			result = stmt.executeQuery(query);
 			if(result.next())
 			{
 				cartId = result.getInt(1);
 			}
-			else
-			{
-				query = "INSERT INTO cart ";
-				query += "VALUES(null,"+ customerId +",null) ";
-				stmt.executeUpdate(query);
-				query = "SELECT cartId ";
-				query += "FROM cart ";
-				query += "WHERE customerId=" + customerId;
-				result = stmt.executeQuery(query);
-				if(result.next())
-				{
-					cartId = result.getInt(1);
-				}
-			}
-			if (cartId == 0)
-			{
-				return;
-			}
 			for (int i = 0; i < gameIds.length; i++)
 			{
 				query = "INSERT INTO cartgame ";
 				query += "VALUES("+ cartId +"," + gameIds[i] + ")";
+				stmt.executeUpdate(query);
+				query = "UPDATE game ";
+				query += "SET gameStock = gameStock - 1 ";
+				query += "WHERE gameId =" + gameIds[i];
 				stmt.executeUpdate(query);
 			}
 		} 
