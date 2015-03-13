@@ -9,10 +9,8 @@
 <%
 final int TOP_GAMES = 10;
 final int BIWEEKLY_GAMES = 5;
-String url = "jdbc:mysql://localhost:3306/gamego";
-String username = "root";
-String passwd = "admin";
-DBConnectionPool connPool = new DBConnectionPool(url, username, passwd);
+
+DBConnectionPool connPool = new DBConnectionPool(Database.DB_HOST, Database.DB_USER, Database.DB_PASS);
 Connection conn = connPool.getConnection();
 Statement stmt = conn.createStatement();
 String query;
@@ -50,7 +48,7 @@ ResultSet gameSet;
 			{
 				%>
 				
-	   			<li><a href="game.jsp?id=<%=gameSet.getString(2) %>"><%=gameSet.getString(1) %></a></li>
+	   			<li><a href="./product?id=<%=gameSet.getString(2) %>"><%=gameSet.getString(1) %></a></li>
 	   			<%
 			}
 			else
@@ -68,7 +66,7 @@ ResultSet gameSet;
 			{
 				%>
 				
-	   			<li><a href="game.jsp?id=<%=gameSet.getString(2) %>"><%=gameSet.getString(1) %></a></li>
+	   			<li><a href="./product?id=<%=gameSet.getString(2) %>"><%=gameSet.getString(1) %></a></li>
 	   			<%
 			}
 			else
@@ -104,7 +102,7 @@ ResultSet gameSet;
 			if (gameSet.next())
 			{
 				%>
-	   			<li><a href="game.jsp?id=<%=gameSet.getString(2) %>"><%=gameSet.getString(1) %></a></li>
+	   			<li><a href="./product?id=<%=gameSet.getString(2) %>"><%=gameSet.getString(1) %></a></li>
 	   			<%
 			}
 			else

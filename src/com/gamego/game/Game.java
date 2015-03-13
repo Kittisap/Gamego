@@ -161,23 +161,6 @@ public class Game
 		return m_genres;
 	}
 	
-	public String getGenreString()
-	{
-		String genreString = "N/A";
-		
-		if(m_genres.size() > 0)
-		{
-			genreString = "";
-			
-			for(int i = 0; i < m_genres.size(); i++)
-				genreString += m_genres.elementAt(i).getName() + " / ";
-			
-			genreString = genreString.substring(0, genreString.length() - 3);
-		}
-		
-		return genreString;
-	}
-	
 	public boolean setReleaseDate(String releaseDate)
 	{
 		if(releaseDate == null)
@@ -268,7 +251,7 @@ public class Game
 	
 	public boolean setPrice(float price)
 	{
-		if(price < 0.0f)
+		if(price < 0f)
 			return false;
 		
 		m_price = price;

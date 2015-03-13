@@ -36,7 +36,7 @@
 				<div class="searchResults">
 					<ul>
 					    <c:forEach items="${searchResults.results}" var="searchResult">
-					    	<li><a href="./game.jsp?id=${searchResult.ID}">${searchResult.shortTitle}</a></li>
+					    	<li><a href="./product?id=${searchResult.ID}">${searchResult.shortTitle}</a></li>
 					    </c:forEach>
 					</ul>
 				</div><br />

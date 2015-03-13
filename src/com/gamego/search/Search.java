@@ -42,7 +42,7 @@ public class Search extends HttpServlet
 			
 			if(searchResults.getTotalResults() == 1)
 			{
-				response.sendRedirect("./game.jsp?id=" + searchResults.getResults().firstElement().getID());
+				response.sendRedirect("./product?id=" + searchResults.getResults().firstElement().getID());
 				return;
 			}
 

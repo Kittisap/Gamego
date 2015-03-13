@@ -14,11 +14,11 @@
 	    	<div class="w-col w-col-3">
 	    		<div class="stat-category">
 		        	<strong>Total Profit:</strong><br /><br />
-		        	<strong>Current Weekly Profit:</strong><br />
-		        	<strong>Current Monthly Profit:</strong><br />
+		        	<strong>Current Week Profit:</strong><br />
+		        	<strong>Current Month Profit:</strong><br />
 		        	<strong>Current Annual Profit:</strong><br /><br>
-		        	<strong>Previous Weekly Profit:</strong><br />
-		        	<strong>Previous Monthly Profit:</strong><br />
+		        	<strong>Previous Week Profit:</strong><br />
+		        	<strong>Previous Month Profit:</strong><br />
 		        	<strong>Previous Annual Profit:</strong>
 				</div>
 			</div>

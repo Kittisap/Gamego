@@ -19,11 +19,11 @@
 	    		</ul>
 		    	<c:forEach items="${transaction.items}" var="transactionItem">
 		    		<div class="transaction-item">
-		    			<a href="./game.jsp?id=${transactionItem.item.ID}">
+		    			<a href="./product?id=${transactionItem.item.ID}">
 		    				<img class="transaction-item-image" src="${transactionItem.item.boxArtPath}" />
 						</a>
 						<ul class="transaction-item-details">
-							<li>${transactionItem.item.title}</li>
+							<li><a href="./product?id=${transactionItem.item.ID}">${transactionItem.item.title}</a></li>
 							<li>Price: ${transactionItem.item.formattedPrice}</li>
 							<li>
 								<form method="post" action="./rate">

@@ -13,15 +13,15 @@ public class Database
 	private DBConnectionPool pool = null;
 	private Connection conn = null;
 	
+	public static final String DB_HOST = "jdbc:mysql://localhost:3306/gamego";
+	public static final String DB_USER = "root";
+	public static final String DB_PASS = "admin";
+	
 	public Database()
 	{
 		try
 		{
-			String host = "jdbc:mysql://localhost:3306/gamego";
-			String username = "root";
-			String password = "admin";
-			
-			pool = new DBConnectionPool(host, username, password);
+			pool = new DBConnectionPool(DB_HOST, DB_USER, DB_PASS);
 			conn = (pool != null ? pool.getConnection() : null);
 		}
 		catch(Exception e) {}

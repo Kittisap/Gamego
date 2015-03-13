@@ -45,8 +45,11 @@ catch(Exception e){}
         	totalPrice += gameList[i].getPrice();
         	if(gameList[i].getBoxArtPath().length() > 0)
         	%>
-        	<li class="w-clearfix"><img class="cart-item-image-example" src="<%=gameList[i].getBoxArtPath() %>">
-        	<div class="cart-item-name-example"><%=gameList[i].getTitle() %></div>
+        	<li class="w-clearfix">
+        	<a href="./product?id=<%=gameList[i].getID()%>">
+        		<img class="cart-item-image-example" src="<%=gameList[i].getBoxArtPath() %>">
+			</a>
+        	<div class="cart-item-name-example"><a href="./product?id=<%=gameList[i].getID()%>"><%=gameList[i].getTitle() %></a></div>
         	<div class="cart-item-price-example"><%=gameList[i].getFormattedPrice() %></div>
         	</li>
         	<%
@@ -61,9 +64,9 @@ catch(Exception e){}
     		<div class="cart-item-name-example">TOTAL PRICE: $<%=priceString %></div>
     	</li>
     </ul>
-    <div class="w-form">
+    <div class="cart-item-name-example w-form">
       <form class="w-clearfix" id="email-form-2" name="email-form-2" data-name="Email Form 2" method="post" action="./checkout">
-        <input class="w-button cart-checkout-button" type="submit" value="Purchase" />
+        <input class="pure-button pure-button-primary" type="submit" value="Purchase" />
         <input type="hidden" name="amount" value="<%=priceString %>" />
       </form>
     </div>
