@@ -338,50 +338,44 @@ public class Database
 		return game;
 	}
 	
-	public Search performSearch(String query)
+	public SearchResult performSearch(String query)
 	{
-		return performSearch(query, Search.DEFAULT_GENRE_ID, 
-				Search.DEFAULT_PAGE);
+		return performSearch(query, SearchResult.DEFAULT_GENRE_ID, 
+				SearchResult.DEFAULT_PAGE);
 	}
 	
-	public Search performSearch(String query, String genreID, String page)
+	public SearchResult performSearch(String query, String genreID, String page)
 	{
-		int numericGenreID = Search.DEFAULT_GENRE_ID;
-		int numericPage = Search.DEFAULT_PAGE;
+		int numericGenreID = SearchResult.DEFAULT_GENRE_ID;
+		int numericPage = SearchResult.DEFAULT_PAGE;
 		
 		try
 		{
-			if(genreID != null)
-				numericGenreID = Integer.parseInt(genreID);
-			
-			if(page != null)
-				numericPage = Integer.parseInt(page);
+			numericGenreID = Integer.parseInt(genreID);
+			numericPage = Integer.parseInt(page);
 		}
 		catch(Exception e) {}
 		
 		return performSearch(query, numericGenreID, numericPage);
 	}
 	
-	public Search performSearch(String query, int genreID, int page)
+	public SearchResult performSearch(String query, int genreID, int page)
 	{
-		if(conn == null)
-			return null;
-		
-		Search search = null;
+		SearchResult search = null;
 		Statement stmt = null;
 		ResultSet countRS = null;
 		ResultSet searchRS = null;
 		
 		try
 		{
-			search = new Search(query, genreID);
+			search = new SearchResult(query, genreID);
 			stmt = conn.createStatement();
 			
 			if(stmt != null && !search.getQuery().isEmpty())
 			{	
 				String sql = "";
 				
-				if(search.getGenreID() == Search.DEFAULT_GENRE_ID)
+				if(search.getGenreID() == SearchResult.DEFAULT_GENRE_ID)
 				{
 					sql = "SELECT COUNT(*) as numRows " + 
 							"FROM game " + 
@@ -407,7 +401,7 @@ public class Database
 				
 				search.setCurrentPage(page);
 				
-				if(search.getGenreID() == Search.DEFAULT_GENRE_ID)
+				if(search.getGenreID() == SearchResult.DEFAULT_GENRE_ID)
 				{
 					sql = "SELECT gameID " + 
 							"FROM game " + 
@@ -475,72 +469,55 @@ public class Database
 		return search;
 	}
 	
-	public String getGenreDropdownHTML(int selectedGenreID)
+	public Vector<Genre> getGenres()
 	{
-		String html = "";
-		
 		Statement stmt = null;
 		ResultSet rs = null;
+		Vector<Genre> genres = new Vector<Genre>();
 		
-		if(conn != null)
+		String sql = "SELECT * " + 
+				"FROM genre " + 
+				"ORDER BY genreName";
+		
+		try
+		{
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			int genreID = 0;
+			String genreName = "N/A";
+			Genre genre = null;
+			
+			while(rs.next())
+			{
+				genreID = rs.getInt("genreID");
+				genreName = rs.getString("genreName");
+				genre = new Genre(genreID, genreName);
+				
+				genres.add(genre);
+			}
+		}
+		catch(Exception e) {}
+		finally
 		{
 			try
 			{
-				stmt = conn.createStatement();
-				
-				if(stmt != null)
-				{
-					int genreID = 0;
-					String genreName = "";
-					
-					html = "<div class=\"searchMargin\">";
-					html += "<label for=\"genre\">Genre</label>";
-					html += "<select id=\"genre\" name=\"genreID\">";
-					html += "<option value=\"0\">All</option>";
-
-					String sql = "SELECT * " + 
-							"FROM genre " + 
-							"ORDER BY genreName";
-
-					rs = stmt.executeQuery(sql);
-					
-					while(rs.next())
-					{
-						genreID = rs.getInt("genreID");
-						genreName = rs.getString("genreName");
-						
-						if(genreID == selectedGenreID)
-							html += "<option value=\"" + genreID + "\" selected>" + genreName + "</option>";
-						else
-							html += "<option value=\"" + genreID + "\">" + genreName + "</option>";
-					}
-					
-					html += "</select>";
-					html += "</div>";
-				}
+				if(rs != null)
+					rs.close();
 			}
 			catch(Exception e) {}
-			finally
+			
+			try
 			{
-				try
-				{
-					if(rs != null)
-						rs.close();
-				}
-				catch(Exception e) {}
-				
-				try
-				{
-					if(stmt != null)
-						stmt.close();
-				}
-				catch(Exception e) {}
-				
-				close();
+				if(stmt != null)
+					stmt.close();
 			}
+			catch(Exception e) {}
+			
+			close();
 		}
 		
-		return html;
+		return genres;
 	}
 	
 	public Vector<Transaction> getUserHistory(int userID)
@@ -581,7 +558,7 @@ public class Database
 	    				if(currentCartID != 0)
 	    					history.add(transaction);
 
-	    				transaction = new Transaction(userID, transactionDate);
+	    				transaction = new Transaction(userID, cartID, transactionDate);
 	    				currentCartID = cartID;
 	    			}
 
@@ -592,8 +569,9 @@ public class Database
 	    			
 	    			transaction.addItem(item);
 	    		}
-	    		
-	    		history.add(transaction);
+
+	    		if(transaction != null)
+	    			history.add(transaction);
 	    	}
 	    }
 	    catch(Exception e) {}
@@ -610,37 +588,47 @@ public class Database
 		ResultSet rs = null;
 		boolean isRated = false;
 		
+		String sql = "SELECT COUNT(*) as numPurchases, " + 
+				"COUNT(rating) as numRatings, " + 
+				"rating.ratingId " + 
+				"FROM game " + 
+				"INNER JOIN cartgame " + 
+				"ON cartgame.gameId = game.gameID " + 
+				"INNER JOIN cart " + 
+				"ON cart.cartId = cartgame.cartId " + 
+				"LEFT JOIN rating " + 
+				"ON game.gameID = rating.gameId " + 
+				"AND cart.customerId = rating.customerId " + 
+				"WHERE cart.customerId = " + user.getID() + " " + 
+				"AND game.gameID = " + game.getID();
+		
 		try
 		{
 			stmt = conn.createStatement();
-			
-			String sql = "SELECT COUNT(*) as numPurchases, " + 
-					"COUNT(rating) as numRatings " + 
-					"FROM game " + 
-					"INNER JOIN cartgame " + 
-					"ON cartgame.gameId = game.gameID " + 
-					"INNER JOIN cart " + 
-					"ON cart.cartId = cartgame.cartId " + 
-					"LEFT JOIN rating " + 
-					"ON game.gameID = rating.gameId " + 
-					"AND cart.customerId = rating.customerId " + 
-					"WHERE cart.customerId = " + user.getID() + " " + 
-					"AND game.gameID = " + game.getID();
-			
 			rs = stmt.executeQuery(sql);
 			
 			if(rs.next())
 			{
 				int numPurchases = rs.getInt("numPurchases");
 				int numRatings = rs.getInt("numRatings");
+				int ratingID = rs.getInt("ratingId");
 				
-				if(numPurchases > 0 && numRatings == 0)
+				if(numPurchases > 0)
 				{
-					sql = "INSERT INTO rating " + 
-							"(ratingId, gameId, customerId, rating) " + 
-							"VALUES (NULL, " + game.getID() + ", " + 
-							user.getID() + ", " + rating + ")";
-
+					if(numRatings == 0)
+					{
+						sql = "INSERT INTO rating " + 
+								"(ratingId, gameId, customerId, rating) " + 
+								"VALUES (NULL, " + game.getID() + ", " + 
+								user.getID() + ", " + rating + ")";
+					}
+					else
+					{
+						sql = "UPDATE rating " + 
+								"SET rating = " + rating + " " + 
+								"WHERE ratingId = " + ratingID;
+					}
+					
 					int affectedRows = stmt.executeUpdate(sql);
 					
 					isRated = (affectedRows == 0 ? false : true);
@@ -651,4 +639,195 @@ public class Database
 		
 		return isRated;
 	}
+	
+	public float getTotalProfit()
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+		float totalProfit = 0f;
+		
+		String sql = "SELECT SUM(game.gamePrice) as totalProfit " + 
+				"FROM game " + 
+				"INNER JOIN cartgame " + 
+				"ON game.gameID = cartgame.gameId";
+		
+		try
+		{
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next())
+				totalProfit = rs.getFloat("totalProfit");
+		}
+		catch(Exception e) {}
+		
+		return totalProfit;
+	}
+	
+	public float getPreviousWeekProfit()
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+		float previousWeekProfit = 0f;
+		
+		String sql = "SELECT SUM(game.gamePrice) as previousWeekProfit " + 
+				"FROM game " + 
+				"INNER JOIN cartgame " + 
+				"ON game.gameID = cartgame.gameId " + 
+				"INNER JOIN cart " + 
+				"ON cartgame.cartId = cart.cartId " + 
+				"WHERE transactionDate >= CURRENT_DATE - INTERVAL DAYOFWEEK(CURRENT_DATE) + 6 DAY " + 
+				"AND transactionDate < CURRENT_DATE - INTERVAL DAYOFWEEK(CURRENT_DATE) - 1 DAY";
+		
+		try
+		{
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next())
+				previousWeekProfit = rs.getFloat("previousWeekProfit");
+		}
+		catch(Exception e) {}
+		
+		return previousWeekProfit;
+	}
+	
+	public float getCurrentWeekProfit()
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+		float currentWeekProfit = 0f;
+		
+		String sql = "SELECT SUM(game.gamePrice) as currentWeekProfit " + 
+				"FROM game " + 
+				"INNER JOIN cartgame " + 
+				"ON game.gameID = cartgame.gameId " + 
+				"INNER JOIN cart " + 
+				"ON cartgame.cartId = cart.cartId " + 
+				"WHERE YEARWEEK(cart.transactionDate, 0) = YEARWEEK(CURRENT_DATE, 0)";
+		
+		try
+		{
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next())
+				currentWeekProfit = rs.getFloat("currentWeekProfit");
+		}
+		catch(Exception e) {}
+		
+		return currentWeekProfit;
+	}
+	
+	public float getCurrentMonthProfit()
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+		float currentMonthProfit = 0f;
+		
+		String sql = "SELECT SUM(game.gamePrice) as currentMonthProfit " + 
+				"FROM game " + 
+				"INNER JOIN cartgame " + 
+				"ON game.gameID = cartgame.gameId " + 
+				"INNER JOIN cart " + 
+				"ON cartgame.cartId = cart.cartId " + 
+				"WHERE YEAR(transactionDate) = YEAR(CURRENT_DATE()) " + 
+				"AND MONTH(transactionDate) = MONTH(CURRENT_DATE())";
+		
+		try
+		{
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next())
+				currentMonthProfit = rs.getFloat("currentMonthProfit");
+		}
+		catch(Exception e) {}
+		
+		return currentMonthProfit;
+	}
+	
+	public float getPreviousMonthProfit()
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+		float previousMonthProfit = 0f;
+		
+		String sql = "SELECT SUM(game.gamePrice) as previousMonthProfit " + 
+				"FROM game " + 
+				"INNER JOIN cartgame " + 
+				"ON game.gameID =  cartgame.gameId " + 
+				"INNER JOIN cart " + 
+				"ON cartgame.cartId = cart.cartId " + 
+				"WHERE YEAR(transactionDate) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) " + 
+				"AND MONTH(transactionDate) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)";
+		
+		try
+		{
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next())
+				previousMonthProfit = rs.getFloat("previousMonthProfit");
+		}
+		catch(Exception e) {}
+		
+		return previousMonthProfit;
+	}
+	
+	public float getCurrentAnnualProfit()
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+		float currentAnnualProfit = 0f;
+		
+		String sql = "SELECT SUM(game.gamePrice) as currentAnnualProfit " + 
+				"FROM game " + 
+				"INNER JOIN cartgame " + 
+				"ON game.gameID = cartgame.gameId " + 
+				"INNER JOIN cart " + 
+				"ON cartgame.cartId = cart.cartId " + 
+				"WHERE YEAR(transactionDate) = YEAR(CURRENT_DATE())";
+		
+		try
+		{
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next())
+				currentAnnualProfit = rs.getFloat("currentAnnualProfit");
+		}
+		catch(Exception e) {}
+		
+		return currentAnnualProfit;
+	}
+	
+	public float getPreviousAnnualProfit()
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+		float previousAnnualProfit = 0f;
+		
+		String sql = "SELECT SUM(game.gamePrice) as previousAnnualProfit " + 
+				"FROM game " + 
+				"INNER JOIN cartgame " + 
+				"ON game.gameID = cartgame.gameId " + 
+				"INNER JOIN cart " + 
+				"ON cartgame.cartId = cart.cartId " + 
+				"WHERE YEAR(transactionDate) = YEAR(CURRENT_DATE()) - 1";
+		
+		try
+		{
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next())
+				previousAnnualProfit = rs.getFloat("previousAnnualProfit");
+		}
+		catch(Exception e) {}
+		
+		return previousAnnualProfit;
+	}
+	
+	
 }

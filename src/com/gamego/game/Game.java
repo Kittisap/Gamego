@@ -1,11 +1,11 @@
 package com.gamego.game;
 
 import java.util.*;
-import java.text.*;
+import com.gamego.util.*;
 
 public class Game
 {
-	public static final int SHORT_TITLE_LENGTH = 53;
+	public static final int SHORT_TITLE_LENGTH = 60;
 	
 	private int m_id;
 	private String m_title;
@@ -283,8 +283,6 @@ public class Game
 	
 	public String getFormattedPrice()
 	{
-		DecimalFormat df = new DecimalFormat("0.00");
-		
-		return "$" + df.format(m_price);
+		return Utilities.formatMoney(m_price);
 	}
 }

@@ -23,7 +23,7 @@ ResultSet gameSet;
 
   <div class="w-container search-container">
     <div class="w-form">
-      <form class="w-clearfix search-bar-form" method="get" action="./search.jsp">
+      <form class="w-clearfix search-bar-form" method="get" action="./search">
         <input class="w-input search-bar-field" type="text" placeholder="Search for a game..." name="q" autofocus="autofocus" />
         <input class="w-button search-bar-button" type="submit" value="Search" />
       </form>

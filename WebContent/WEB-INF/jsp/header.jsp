@@ -28,7 +28,8 @@
 <body>
   <div class="w-nav navbar main-navbar" data-collapse="medium" data-animation="default" data-duration="400" data-contain="1">
     <div class="w-container">
-      <a class="w-nav-brand brand-block" href="./index.jsp"><img class="gamego-image" src="images/game go logo.png" width="214" height="62" alt="54eb77b357cf2eaa083890a1_game%20go%20logo.png">
+      <a class="w-nav-brand brand-block" href="./index.jsp">
+      	<img class="gamego-image" src="images/game go logo.png" width="214" height="62" alt="54eb77b357cf2eaa083890a1_game%20go%20logo.png">
       </a>
       <nav class="w-nav-menu" role="navigation">
       	<%
@@ -44,6 +45,14 @@
       			User user = User.getSessionUser(request);
       	%>
       	<a class="w-nav-link nav-link-signup" href="#"><%=user.getUsername() %></a>
+      	<%
+      			if(user.isAdmin())
+      			{
+      	%>
+      	<a class="w-nav-link nav-link-signup" href="./admin">Admin</a>
+      	<%
+      			}
+      	%>
       	<a class="w-nav-link nav-link-signup" href="./history">History</a>
       	<a class="w-nav-link nav-link-signup" href="./logout">Logout</a>
       	<%

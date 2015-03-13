@@ -53,6 +53,10 @@ public class Rate extends HttpServlet
 					
 					rd.include(request, response);
 				}
+				else
+				{
+					response.sendRedirect("./history");
+				}
 			}
 			catch(Exception e) {}
 		}

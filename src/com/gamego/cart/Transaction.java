@@ -3,26 +3,31 @@ package com.gamego.cart;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import com.gamego.util.Utilities;
+
 public class Transaction
 {
 	private int m_userID;
-	private Vector<TransactionItem> m_items;
+	private int m_transactionID;
 	private Date m_transactionDate;
+	private Vector<TransactionItem> m_items;
 	private float m_orderTotal;
 	
 	public Transaction()
 	{
 		m_userID = 0;
-		m_items = new Vector<TransactionItem>();
+		m_transactionID = 0;
 		m_transactionDate = new Date();
+		m_items = new Vector<TransactionItem>();
 		m_orderTotal = 0f;
 	}
 
-	public Transaction(int userID, Date transactionDate)
+	public Transaction(int userID, int transactionID, Date transactionDate)
 	{
 		this();
 		
 		setUserID(userID);
+		setTransactionID(transactionID);
 		setTransactionDate(transactionDate);
 	}
 	
@@ -41,20 +46,19 @@ public class Transaction
 		return m_userID;
 	}
 	
-	public boolean addItem(TransactionItem item)
+	public boolean setTransactionID(int transactionID)
 	{
-		if(item == null)
+		if(transactionID <= 0)
 			return false;
 		
-		m_items.add(item);
-		m_orderTotal += item.getItem().getPrice();
+		m_transactionID = transactionID;
 		
 		return true;
 	}
 	
-	public Vector<TransactionItem> getItems()
+	public int getTransactionID()
 	{
-		return m_items;
+		return m_transactionID;
 	}
 	
 	public boolean setTransactionDate(Date transactionDate)
@@ -72,6 +76,22 @@ public class Transaction
 		return m_transactionDate;
 	}
 	
+	public boolean addItem(TransactionItem item)
+	{
+		if(item == null)
+			return false;
+		
+		m_items.add(item);
+		m_orderTotal += item.getItem().getPrice();
+		
+		return true;
+	}
+	
+	public Vector<TransactionItem> getItems()
+	{
+		return m_items;
+	}
+	
 	public int getItemCount()
 	{
 		if(m_items == null)
@@ -87,9 +107,7 @@ public class Transaction
 	
 	public String getFormattedOrderTotal()
 	{
-		DecimalFormat df = new DecimalFormat("0.00");
-		
-		return "$" + df.format(m_orderTotal);
+		return Utilities.formatMoney(m_orderTotal);
 	}
 	
 	public static String formatTransactionID(int transactionID)
